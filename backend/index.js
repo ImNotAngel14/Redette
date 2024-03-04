@@ -18,18 +18,16 @@ app.post('/login', (req, res) =>
 {
   // Obtener los datos de inicio de sesión del cuerpo de la solicitud
   const { username, password } = req.body;
-
+  
+  //Creamos la conexion a mysql
+  const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'Redette'
+  });
   // Llamamos al procedure de autenticacion del login
   try {
-
-    //Creamos la conexion a mysql
-    const connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'Redette'
-    });
-
     connection.connect();
     connection.query('CALL Redette.sp_authLogin("'+username+'", "'+password+'");', (error, results, fields) => {
       if (error)
