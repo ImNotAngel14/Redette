@@ -4,13 +4,6 @@ const mysql = require('mysql');
 const app = express();
 const port = 3000;
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'PrograWeb2'
-  });
-
 // Middleware para habilitar CORS
 app.use(cors());
 
@@ -23,21 +16,26 @@ app.listen(port, () => {
 // Ruta para el inicio de sesión
 app.post('/login', (req, res) => 
 {
-  const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'PrograWeb2'
-  });
   // Obtener los datos de inicio de sesión del cuerpo de la solicitud
   const { username, password } = req.body;
+
+  // Llamamos al procedure de autenticacion del login
   try {
+
+    //Creamos la conexion a mysql
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'Redette'
+    });
+
     connection.connect();
-    connection.query('CALL PrograWeb2.sp_authLogin("'+username+'", "'+password+'");', (error, results, fields) => {
+    connection.query('CALL Redette.sp_authLogin("'+username+'", "'+password+'");', (error, results, fields) => {
       if (error)
       {
         console.error('Error al ejecutar la consulta:', error);
-        throw error;
+        res.json({ auth: 0 });
       }
       else
       {
@@ -46,12 +44,19 @@ app.post('/login', (req, res) =>
     });
     
   } catch (error) {
+
+    // Imprimimos en consola el error capturado y respondemos al front end
     console.error('Error al conectar a la base de datos:', error);
-    res.json({ auth: 0 });//false
+
+    res.json({ auth: 0 });
+
+    // Aqui deberia enviar la respuesta como un codigo http
+    // ...
   }
   finally
   {
+
+    // Finalizamos conexión a la base de datos
     connection.end();
   }
-  
 });

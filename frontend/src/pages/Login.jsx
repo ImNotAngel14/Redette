@@ -6,32 +6,45 @@ import FormContainer from './components/FormContainer';
 
 
 const Register = () => {
+
+    // Valores de las credenciales.
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    // Ejecutamos la autenticación del usuario conectandonos a la API.
     const handleSubmit = async (event) => {
+
+        // Por precaución evitamos que se ejecute el submit predeterminado y primero obtengamos la respuesta.
         event.preventDefault();
+
         // Llamar a la API de Node.js
         try {
-        const response = await fetch('http://localhost:3000/login', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
-        });
+            const response = await fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
 
-        const data = await response.json();
-        if(data.auth)
-        {
-            alert("Inicio de sesión exitoso.");
-        }
-        else
-        {
-            alert("Usuario o contraseña incorrectos.");
-        }
+            // Actuamos en base a la respuesta de la API
+            const data = await response.json();
+            if(data.auth)
+            {
+                alert("Inicio de sesión exitoso.");
+
+                // Aqui deberiamos redirigir la página al home.
+                // ...
+            }
+            else
+            {
+                alert("Usuario o contraseña incorrectos.");
+                
+                // Mostrar mensaje de error en credenciales.
+                // ...
+            }
         } catch (error) {
-        console.error('Error al llamar a la API:', error);
+            console.error('Error al llamar a la API:', error);
         }
     };
     return (
@@ -54,15 +67,10 @@ const Register = () => {
                         </div>
                         </FormContainer>
                     </div>
-
                 </div>
             </div>
-
         </div>
-
     )
-
-
 }
 
 export default Register
