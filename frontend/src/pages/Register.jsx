@@ -6,9 +6,6 @@ import FormContainer from './components/FormContainer';
 import '@fortawesome/fontawesome-free/css/all.css';
 import Login from './Login'
 
-
-
-
 const Register = () => {
     return (
         <div>
@@ -19,19 +16,19 @@ const Register = () => {
                     <div className="row justify-content-center">
                         <div className='col-12'>
                             <FormContainer>
-                            <h3>Crea una cuenta</h3>
-                            <div className='formWrapper'>
-                                <form>
-                                    <input type='email' placeholder='Correo'/>
-                                    <input type='text' placeholder='Nombre de Usuario'/>
-                                    <input type='password' placeholder='Contraseña'/>
-                                    <input type='password' placeholder='Confirmar contraseña'/>
-                                    <input type='file' id='file'/>
-                                    <label htmlFor='file'><i className="fa-regular fa-image fa-lg"></i><span>Foto de perfil</span></label>
-                                    <input type='submit' value='Registrate' />
-                                </form>
-                                <p>¿Ya tienes una cuenta?</p> <Link to="/login">Inicia sesión</Link>
-                            </div>
+                                <h3>Crea una cuenta</h3>
+                                <div className='formWrapper'>
+                                    <form>
+                                        <input type='email' placeholder='Correo'/>
+                                        <input type='text' placeholder='Nombre de Usuario'/>
+                                        <input type='password' placeholder='Contraseña'/>
+                                        <input type='password' placeholder='Confirmar contraseña'/>
+                                        <input type='file' id='file'/>
+                                        <label htmlFor='file'><i className="fa-regular fa-image fa-lg"></i><span>Foto de perfil</span></label>
+                                        <input type='submit' value='Registrate' />
+                                    </form>
+                                    <p>¿Ya tienes una cuenta?</p> <Link to="/login">Inicia sesión</Link>
+                                </div>
                             </FormContainer>
                         </div>
                     </div>
