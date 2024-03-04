@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/Register.css'
 import FormContainer from './components/FormContainer';
@@ -29,7 +30,7 @@ const Register = () => {
                                     <label htmlFor='file'><i className="fa-regular fa-image fa-lg"></i><span>Foto de perfil</span></label>
                                     <input type='submit' value='Registrate' />
                                 </form>
-                                <p>¿Ya tienes una cuenta?</p> <a href='Login'>Inicia sesión</a>
+                                <p>¿Ya tienes una cuenta?</p> <Link to="/login">Inicia sesión</Link>
                             </div>
                             </FormContainer>
                         </div>
