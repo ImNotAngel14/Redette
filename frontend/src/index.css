@@ -12,7 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+/* 
 a{
   color: #499BA0;
 }
@@ -20,7 +20,7 @@ a{
 a:hover {
   color: #5ebdc2;
   text-decoration: line;
-}
+} */
 
 /* a {
   font-weight: 500;

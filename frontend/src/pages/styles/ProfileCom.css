@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inika", serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: #F5F5F5;
+    display: block;
+  }
+
+.ContentPage{
+  margin-top: 1.0rem;
+}
+
+.SpanContainer {
+  a{
+    color: #eefeff;;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    margin-bottom: 0.7rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+    &:hover{
+      color: #c3fbff;;
+    }
+  }
+  .PostsLink,.SavedLink{
+    text-shadow: none;
+  }
+}
+
+.CommunityContainer{
+    margin-bottom: 2.75rem;
+  }
+  
+  .CommunityWrapper{
+    margin-left: 4.5rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+  }
+
+  .CommunityImg{
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .DescLabel{
+    padding-top: 0.5rem;
+    margin-bottom: 0;
+    font-weight: bold;
+  }
+
+  .CommunityUnionDate{
+    display: flex;
+    flex-direction: row;
+    font-size: 0.9rem;
+    color: #537D87;
+    .UnionDate{
+      padding-left: 0.5rem;
+    }
+  }
+  
+  .Buttons{
+    button{
+      border: 1px solid rgb(156, 156, 156);
+      &:hover{
+        border: 1px solid rgb(156, 156, 156);
+        background-color: #dddddd;
+      }
+    }
+    .btn{
+      --bs-btn-disabled-opacity: 1.0;
+    }
+  }
+
+  /* p{
+    margin-bottom: 0;
+  } */
+  
+  .btn-spacing {
+    margin-right: 10px; /* Agrega un espacio a la derecha de cada botón */
+  }

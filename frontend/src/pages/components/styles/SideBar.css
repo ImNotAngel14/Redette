@@ -1,0 +1,37 @@
+.SideBarWrapper{
+    display: flex;
+    background-color: #537D87;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-radius: 0.5rem;
+    margin-right: 4.5rem;
+    flex-direction: column;
+    text-align: start;
+    /* margin-right: 2.25rem; */
+  
+    hr{
+      color:white;
+    }
+  
+    button{
+      color:white;
+      background-color: #537D87;
+      border:none;
+      text-align: start;
+      transition:none;
+      padding-left: 1.25rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-radius: 0px;
+      font-size: large;
+  
+      i{
+        padding-right: 0.25rem;
+      }
+  
+       &:hover{
+        border:none;
+        background-color: #446f7c;
+      }
+    }
+  }

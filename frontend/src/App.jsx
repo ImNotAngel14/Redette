@@ -6,7 +6,13 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import Register from './pages/Register'
 import Login from './pages/Login'
-//import Home from './pages/Home'
+// import Community from './pages/Community'
+// import Post from './pages/Post'
+// import ProfileCom from './pages/ProfileCom'
+// import ProfilePosts from './pages/ProfilePosts'
+// import ProfileSaved from './pages/ProfileSaved'
+// import Home from './pages/Home'
+
 
 
 
@@ -42,11 +48,21 @@ import Login from './pages/Login'
 function App() {
 
   return (
-      // <Register/>
+    //<Register/>
 
-      <Login/>
+    <Login/>
 
-      //<Home/>
+    // <Home/>
+      
+    // <Community/>
+
+    // <Post/>
+
+    // <ProfileCom/>
+    
+    // <ProfilePosts/>   
+
+    // <ProfileSaved/>    
 
   )
 }

@@ -1,0 +1,46 @@
+.CommentContainer{
+    /* margin-top: 2.75rem; */
+    margin-bottom: 2.75rem;
+}
+
+.CommentWrapper{
+margin-left: 4.5rem;
+background-color: white;
+padding: 1.5rem;
+border-radius: 0.75rem;
+}
+
+.CommentCommunityUser{
+display: flex;
+flex-direction: row;
+gap:5px;
+.CommunityP{
+    font-weight: bold;
+}
+}
+
+.Buttons{
+button{
+    border: 1px solid rgb(156, 156, 156);
+    &:hover{
+    border: 1px solid rgb(156, 156, 156);
+    background-color: #dddddd;
+    }
+}
+.btn{
+    --bs-btn-disabled-opacity: 1.0;
+}
+.btn:disabled{
+    border: 1px solid rgb(156, 156, 156);
+}
+}
+
+.btn-spacing {
+margin-right: 10px; /* Agrega un espacio a la derecha de cada botón */
+}
+
+.UserImgComment{
+width: 2rem;
+height: 2rem;
+border-radius: 2rem;
+}
