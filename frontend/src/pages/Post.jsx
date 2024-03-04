@@ -1,13 +1,13 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Home.css'
+import './styles/Post.css'
 import NavBar from './components/Navbar'
 import SideBar from './components/SideBar'
 import PostContainer from './components/PostContainer';
-import PostInputContainer from './components/PostInputContainer';
+import CommentInputContainer from './components/CommentInputContainer';
+import CommentContainer from './components/CommentContainer';
 
-
-const Home = () => {
+const Post = () => {
     return (
         <div>
             <NavBar>
@@ -17,12 +17,22 @@ const Home = () => {
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
-                        <PostInputContainer>
-                        </PostInputContainer>
-                        </div>
-                        <div className='row'>
                         <PostContainer>
                         </PostContainer>
+                        </div>
+                        <div className='row'>
+                            <div className='CommentHeader'>
+                                <h3>Comentarios</h3>
+                                <hr/>
+                            </div>
+                        </div>
+                        <div className='row'>
+                        <CommentInputContainer>
+                        </CommentInputContainer>
+                        </div>
+                        <div className='row'>
+                        <CommentContainer>
+                        </CommentContainer>
                         </div>
                     </div>
                     <div class="col-lg-1  d-lg-block d-none" >
@@ -38,10 +48,9 @@ const Home = () => {
             </div>
 
         </div>
-
     )
 
 
 }
 
-export default Home
+export default Post

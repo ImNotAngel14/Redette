@@ -8,6 +8,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from './pages/Register';
 import Login from './pages/Login';
 //import Home from './pages/Home'
+// import Community from './pages/Community'
+// import Post from './pages/Post'
+// import ProfileCom from './pages/ProfileCom'
+// import ProfilePosts from './pages/ProfilePosts'
+// import ProfileSaved from './pages/ProfileSaved'
 
 function App() {
 
@@ -19,7 +24,15 @@ function App() {
         {/*<Route path="/home" element={ <Home/> } />*/}
       </Routes>
     </Router>
+    // <Community/>
+
+    // <Post/>
+
+    // <ProfileCom/>
     
+    // <ProfilePosts/>   
+
+    // <ProfileSaved/>  
   );
 }
 

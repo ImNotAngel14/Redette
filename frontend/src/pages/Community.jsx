@@ -1,19 +1,22 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Home.css'
-import NavBar from './components/Navbar'
-import SideBar from './components/SideBar'
-import PostContainer from './components/PostContainer';
-import PostInputContainer from './components/PostInputContainer';
+import './styles/Community.css'
+import NavBar from './components/Navbar.jsx'
+import CommunityHeader from "./components/CommunityHeader.jsx"
+import PostContainer from './components/PostContainer.jsx';
+import PostInputContainer from './components/PostInputContainer.jsx';
+import SideBarCmt from "./components/SideBarCmt.jsx"
+// import UserImage from "./components/img/userimage.jpeg"
 
-
-const Home = () => {
+const Community = () => {
     return (
         <div>
             <NavBar>
             </NavBar>
 
             <div className='container-fluid ContentPage'>
+                <CommunityHeader>                   
+                </CommunityHeader>
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
@@ -25,13 +28,13 @@ const Home = () => {
                         </PostContainer>
                         </div>
                     </div>
-                    <div class="col-lg-1  d-lg-block d-none" >
+                    <div className="col-lg-1  d-lg-block d-none" >
                     {/* Espacio entre las columnas visible solo en pantallas LG o más grandes */}
                     </div>
                     <div className='col-lg-3 col-md-4 order-last'>
 
-                    <SideBar>
-                    </SideBar>
+                    <SideBarCmt>
+                    </SideBarCmt>
 
                     </div>
                 </div>
@@ -44,4 +47,4 @@ const Home = () => {
 
 }
 
-export default Home
+export default Community;
