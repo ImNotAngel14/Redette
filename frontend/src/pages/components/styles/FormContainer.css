@@ -23,6 +23,7 @@
 .formContainer form input[type="password"] {
     /* width: 14.25rem; */
     background-color: #F5F5F5;
+    color: black;
     padding: 0.625rem;
     margin-bottom: 0.625rem;
     /* border: 1px solid #61868593; */
