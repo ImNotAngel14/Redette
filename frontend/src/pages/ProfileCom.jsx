@@ -21,13 +21,13 @@ const ProfileCom = () => {
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
-                            <div className='CommunityContainer'>
-                                <div className='CommunityWrapper'>
+                            <div className='U_CommunityContainer'>
+                                <div className='U_CommunityWrapper'>
                                     <div className='row'>
                                         <div className='col-9'>
-                                            <div className='CommunityHeader'>
+                                            <div className='U_CommunityHeader'>
                                                 <p>Usuario Creador</p> 
-                                                <h3>Nombre de la Comunidad</h3> 
+                                                <a href='/comm'><h3>Nombre de la Comunidad</h3> </a>
                                             </div>
                                         </div>
                                         <div className='col-3 d-flex justify-content-end'>

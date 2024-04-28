@@ -40,6 +40,14 @@
     .btn:disabled{
       border: 1px solid rgb(156, 156, 156);
     }
+    a{
+      text-decoration: none;
+      color: black;
+      :hover{
+        color: black;
+        text-decoration: none;
+      }
+    }
   }
   
   .btn-spacing {

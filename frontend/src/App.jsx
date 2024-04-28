@@ -7,12 +7,13 @@ import '@fortawesome/fontawesome-free/css/all.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Register from './pages/Register';
 import Login from './pages/Login';
-//import Home from './pages/Home'
-// import Community from './pages/Community'
-// import Post from './pages/Post'
-// import ProfileCom from './pages/ProfileCom'
-// import ProfilePosts from './pages/ProfilePosts'
-// import ProfileSaved from './pages/ProfileSaved'
+import Home from './pages/Home';
+import Post from './pages/Post';
+ import Community from './pages/Community'
+ import ProfileCom from './pages/ProfileCom'
+ import ProfilePosts from './pages/ProfilePosts'
+ import ProfileSaved from './pages/ProfileSaved'
+
 
 function App() {
 
@@ -21,7 +22,14 @@ function App() {
       <Routes>
         <Route exact path="/login" element={ <Login/> } />
         <Route path="/register" element={ <Register/> } />
-        {/*<Route path="/home" element={ <Home/> } />*/}
+        {<Route path="/home" element={ <Home/> } />}
+        {<Route path="/post" element={ <Post/> } />}
+        {<Route path="/comm" element={ <Community/> } />}
+        {<Route path="/pfcomm" element={ <ProfileCom/> } />}
+        {<Route path="/pfposts" element={ <ProfilePosts/> } />}
+        {<Route path="/pfsaved" element={ <ProfileSaved/> } />}
+
+
       </Routes>
     </Router>
     // <Community/>

@@ -1,4 +1,4 @@
-.SideBarWrapper{
+.Cmt_SideBarWrapper{
     display: flex;
     background-color: #537D87;
     padding-top: 1.25rem;
@@ -34,7 +34,7 @@
       color:white;
     }
 
-    .DateUserContainer{
+    .Cmt_DateUserContainer{
         flex-direction: row;
 
     }

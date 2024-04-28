@@ -35,13 +35,13 @@ const PostContainer = () => {
                 <hr/>
                 <div className='Buttons'>
                     <div className="btn-group btn-spacing" role="group" aria-label="Basic example">
-                        <button type="button" className="btn"><i class="fa-solid fa-angles-up"></i></button>
+                        <button type="button" className="btn"><i className="fa-solid fa-angles-up"></i></button>
                         <button type="button" className="btn" disabled>#</button>
-                        <button type="button" className="btn"><i class="fa-solid fa-angles-down"></i></button>
+                        <button type="button" className="btn"><i className="fa-solid fa-angles-down"></i></button>
                     </div>
-                    <button className="btn-spacing"> <a><i class="fa-solid fa-comments"></i> Comentarios</a> </button>
-                    <button className="btn-spacing"> <i class="fa-solid fa-share"></i> Compartir </button>
-                    <button className="btn-spacing"> <i class="fa-solid fa-bookmark"></i> Guardar</button>
+                    <button className="btn-spacing"> <a href='/post'><i className="fa-solid fa-comments"></i> Comentarios</a> </button>
+                    <button className="btn-spacing"> <i className="fa-solid fa-share"></i> Compartir </button>
+                    <button className="btn-spacing"> <i className="fa-solid fa-bookmark"></i> Guardar</button>
                 </div>
             </div>
         </div>

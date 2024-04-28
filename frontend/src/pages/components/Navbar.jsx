@@ -21,10 +21,10 @@ const NavBar = () => {
         </div>
         <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex flex-end">
             <li className="nav-item">
-            <a className="nav-link" href="#"><i className="fa-solid fa-house fa-2xl"></i></a>
+            <a className="nav-link" href="/home"><i className="fa-solid fa-house fa-2xl"></i></a>
             </li>
             <li className="nav-item">
-            <img className='UserImage' src={UserImage} alt=''/>
+            <a href='/pfposts'><img className='UserImage' src={UserImage} alt=''/></a>
             </li>
         </ul>
         </Navbar.Collapse>

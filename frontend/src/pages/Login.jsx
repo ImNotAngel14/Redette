@@ -54,13 +54,13 @@ const Register = () => {
     };
 
     return (
-        <div>
+        <div className='R_body'>
             <div className='header'>
                 <h2>Redette</h2>
             </div>
             <div className="container">
                 <div className="row justify-content-center">
-                    <div className='col-12'>
+                    <div className='col-4'>
                         <FormContainer>
                             <h3>Inicia Sesión</h3>
                             <p id="id_wrong_auth_msg" style={{color:'red'}} hidden >Credenciales inválidas.</p>

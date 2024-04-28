@@ -23,16 +23,16 @@ const ProfileHeader= () => {
             <hr/>
             <div className='col-12 d-flex d-flex justify-content-evenly'>
                 <div className=' col-3 SpanContainer d-flex justify-content-center'>
-                    <a href='#' className='PostsLink'>Publicaciones</a>
+                    <a href='/pfposts' className='PostsLink'>Publicaciones</a>
                 </div>
                 <div className='col-3 SpanContainer d-flex justify-content-center'>
-                    <a href='#' className='CommunityLink'>Comunidades</a>
+                    <a href='/pfcomm' className='CommunityLink'>Comunidades</a>
                 </div>
                 <div className='col-3 SpanContainer d-flex justify-content-center'>
-                    <a href='#' className='SavedLink'>Guardados</a>  
+                    <a href='/pfsaved' className='SavedLink'>Guardados</a>  
                 </div>
             </div>
-        </div>        
+        </div>
     </div>
     
   );

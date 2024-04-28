@@ -8,13 +8,13 @@ import Login from './Login'
 
 const Register = () => {
     return (
-        <div>
+        <div className='R_body'>
             <div className='header'>
                 <h2>Redette</h2>
             </div>
                 <div className="container">
                     <div className="row justify-content-center">
-                        <div className='col-12'>
+                        <div className='col-4'>
                             <FormContainer>
                                 <h3>Crea una cuenta</h3>
                                 <div className='formWrapper'>

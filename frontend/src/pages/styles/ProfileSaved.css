@@ -12,6 +12,11 @@ body {
   margin-top: 1.0rem;
 }
 
+.savedTitle{
+  margin-left: 5rem;
+  font-weight:600;
+}
+
 .SpanContainer {
   a{
     color: #eefeff;;

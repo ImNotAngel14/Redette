@@ -12,6 +12,17 @@ body {
   margin-top: 1.0rem;
 }
 
+a{
+  text-decoration: none;
+  :hover{
+    text-decoration: none !important;
+  }
+  :focus{
+    text-decoration: none !important;
+  }
+}
+
+
 .SpanContainer {
   a{
     color: #eefeff;;
@@ -29,11 +40,11 @@ body {
   }
 }
 
-.CommunityContainer{
+.U_CommunityContainer{
     margin-bottom: 2.75rem;
   }
   
-  .CommunityWrapper{
+  .U_CommunityWrapper{
     margin-left: 4.5rem;
     background-color: white;
     padding: 1.5rem;

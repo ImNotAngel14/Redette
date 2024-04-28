@@ -9,7 +9,7 @@ import PostInputContainer from './components/PostInputContainer';
 
 const Home = () => {
     return (
-        <div>
+        <div className='h_body'>
             <NavBar>
             </NavBar>
 
@@ -25,7 +25,7 @@ const Home = () => {
                         </PostContainer>
                         </div>
                     </div>
-                    <div class="col-lg-1  d-lg-block d-none" >
+                    <div className="col-lg-1  d-lg-block d-none" >
                     {/* Espacio entre las columnas visible solo en pantallas LG o más grandes */}
                     </div>
                     <div className='col-lg-3 col-md-4 order-last'>

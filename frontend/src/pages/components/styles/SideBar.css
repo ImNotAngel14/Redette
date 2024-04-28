@@ -13,6 +13,29 @@
       color:white;
     }
   
+    a{
+      text-decoration: none;
+      color:white;
+      background-color: #537D87;
+      border:none;
+      text-align: start;
+      transition:none;
+      padding-left: 1.25rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      border-radius: 0px;
+      font-size: large;
+  
+      i{
+        padding-right: 0.25rem;
+      }
+  
+       &:hover{
+        border:none;
+        background-color: #446f7c;
+      }
+    }
+
     button{
       color:white;
       background-color: #537D87;
@@ -34,4 +57,5 @@
         background-color: #446f7c;
       }
     }
+    
   }
