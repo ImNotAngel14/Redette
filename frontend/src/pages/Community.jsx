@@ -1,19 +1,22 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Home.css'
-import NavBar from './components/Navbar'
-import SideBar from './components/SideBar'
-import PostContainer from './components/PostContainer';
-import PostInputContainer from './components/PostInputContainer';
+import './styles/Community.css'
+import NavBar from './components/Navbar.jsx'
+import CommunityHeader from "./components/CommunityHeader.jsx"
+import PostContainer from './components/PostContainer.jsx';
+import PostInputContainer from './components/PostInputContainer.jsx';
+import SideBarCmt from "./components/SideBarCmt.jsx"
+// import UserImage from "./components/img/userimage.jpeg"
 
-
-const Home = () => {
+const Community = () => {
     return (
-        <div className='h_body'>
+        <div>
             <NavBar>
             </NavBar>
 
             <div className='container-fluid ContentPage'>
+                <CommunityHeader>                   
+                </CommunityHeader>
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
@@ -30,8 +33,8 @@ const Home = () => {
                     </div>
                     <div className='col-lg-3 col-md-4 order-last'>
 
-                    <SideBar>
-                    </SideBar>
+                    <SideBarCmt>
+                    </SideBarCmt>
 
                     </div>
                 </div>
@@ -44,4 +47,4 @@ const Home = () => {
 
 }
 
-export default Home
+export default Community;

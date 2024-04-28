@@ -1,25 +1,24 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Home.css'
-import NavBar from './components/Navbar'
-import SideBar from './components/SideBar'
-import PostContainer from './components/PostContainer';
-import PostInputContainer from './components/PostInputContainer';
+import './styles/ProfileSaved.css'
+import NavBar from './components/Navbar.jsx'
+import ProfileHeader from "./components/ProfileHeader.jsx"
+import PostContainer from './components/PostContainer.jsx';
+import SideBarProfile from "./components/SideBarProfile.jsx"
+// import UserImage from "./components/img/userimage.jpeg"
 
-
-const Home = () => {
+const ProfileSaved = () => {
     return (
-        <div className='h_body'>
+        <div>
             <NavBar>
             </NavBar>
 
             <div className='container-fluid ContentPage'>
+                <ProfileHeader>                   
+                </ProfileHeader>
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
-                        <div className='row'>
-                        <PostInputContainer>
-                        </PostInputContainer>
-                        </div>
+                        <h3 className='savedTitle'>Guardados</h3>
                         <div className='row'>
                         <PostContainer>
                         </PostContainer>
@@ -30,8 +29,8 @@ const Home = () => {
                     </div>
                     <div className='col-lg-3 col-md-4 order-last'>
 
-                    <SideBar>
-                    </SideBar>
+                    <SideBarProfile>
+                    </SideBarProfile>
 
                     </div>
                 </div>
@@ -44,4 +43,4 @@ const Home = () => {
 
 }
 
-export default Home
+export default ProfileSaved

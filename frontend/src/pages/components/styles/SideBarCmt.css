@@ -1,0 +1,68 @@
+.Cmt_SideBarWrapper{
+    display: flex;
+    background-color: #537D87;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-radius: 0.5rem;
+    margin-right: 4.5rem;
+    flex-direction: column;
+    text-align: start;
+    /* margin-right: 2.25rem; */
+  
+    button{
+        color:white;
+        background-color: #589fb1;
+        border:none;
+        text-align: center;
+        transition:none;
+        padding-left: 1.25rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        border-radius: 0px;
+        font-size: large;
+        margin: 0.5rem;
+        font-weight: 800;
+        border-radius: 0.5rem;
+    
+         &:hover{
+          border:none;
+          background-color: #446f7c;
+        }
+      }
+
+    hr{
+      color:white;
+    }
+
+    .Cmt_DateUserContainer{
+        flex-direction: row;
+
+    }
+  
+    h4,p{
+      color:white;
+      /* background-color: #537D87; */
+      border:none;
+      text-align: start;
+      transition:none;
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+
+      padding-top: 0.75rem;
+      padding-bottom: 1rem;
+      border-radius: 0px;
+
+    }
+
+    strong,span{
+        color:white;
+        /* background-color: #537D87; */
+        border:none;
+        text-align: start;
+        transition:none;
+        padding-left: 0.75rem;  
+        padding-top: 0.75rem;
+        padding-bottom: 1rem;
+        border-radius: 0px;
+      }
+  }

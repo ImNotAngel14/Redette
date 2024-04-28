@@ -48,7 +48,7 @@
 .formContainer form input[type="file"] {
     display:none;
 }
-
+.formWrapper{
 label{
 align-items: center;
 display: flex;
@@ -70,7 +70,7 @@ i{
     }
 }
 }
-
+}
 .formContainer form input[type="submit"] {
     margin-bottom: 0.625rem;
     background-color: #499BA0;

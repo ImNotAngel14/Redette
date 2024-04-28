@@ -1,0 +1,41 @@
+.CommunityHeader{
+    flex-direction: row;
+    margin-bottom: 1rem;
+    margin-left: 4.5rem;
+    margin-right: 4.5rem;
+    /* padding-bottom: 1.5rem; */
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+
+    border-radius: 0.5rem;
+    color: #eefeff;
+    text-shadow: 2px 2px 1px #2d57618e;
+    background-color: #519CAE;
+    img{
+        width:9rem;
+        height:9rem;
+        border-radius: 5rem;
+    }
+    .CommunityInfoHeader{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* padding-right: 4.75rem; */
+    }
+    .CommunityUsersNumber{
+      display: flex;
+      flex-direction: row;
+
+      .UsersNumber{
+        margin-left: 0.5rem;
+      }
+    }
+    hr{
+      margin-top: 0.5rem;
+      margin-bottom: 0;
+      color: #ffffff;
+      /* padding-top: 0.5rem; */
+
+    }
+
+}
