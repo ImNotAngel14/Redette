@@ -33,11 +33,31 @@ app.post('/login', async (req, res) => {
         contrasena: password
       }
     });
-
-    console.log(user); // Imprimir el usuario encontrado en la consola
-    res.json(user); // Devolver el usuario como respuesta al cliente
+    if(user.length === 0){
+      console.log("No encontrado.")
+      res.json({ auth: 0  });
+    }
+    else{
+      console.log("UserID: " + user.id_usuario); // Imprimir el usuario encontrado en la consola
+      res.json({auth: 1, userId: user.id_usuario}); // Devolver el usuario como respuesta al cliente
+    }
+    
   } catch (error) {
     console.error('Error al obtener usuario:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
+
+
+app.post('/register', async (req, res) =>
+{
+  const { username, password } = req.body;
+  try
+  {
+
+  }
+  catch (error) {
+    console.error('Error al obtener usuario:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+})
