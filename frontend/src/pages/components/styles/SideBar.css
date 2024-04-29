@@ -59,3 +59,81 @@
     }
     
   }
+
+  #TittlePostInput {
+    border-radius: 0.5rem 0.5rem 0rem 0rem;
+  }
+
+  #TextPostInput {
+    border-radius: 0rem 0rem 0.5rem 0.5rem;
+  }
+
+  .txta-tema{
+    border-radius: 0.5rem;
+  }
+
+  .CommunityLabel{
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-right: 0.5rem;
+
+  }
+
+  #CommunityList{
+    padding-left: 0.5rem;
+  }
+
+  .CustomFileInput {
+    background-color: #f0f0f0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.FileInputContainer {
+    display: inline-block;
+}
+
+#file_name {
+    margin-left: 10px;
+    display: none;
+}
+
+.FileInputContainer{
+  padding:0.5rem;
+  margin-right: 1.5rem;
+  border-radius: 0.5rem;
+
+  i{
+    padding-right: 0.5rem;
+  }
+  input[type="file"] {
+    display:none;
+  }
+
+  &:hover{
+    background-color: #ececec;
+  }
+}
+
+.buttonPostAccept{
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+
+  border-radius: 0.4rem;
+    background-color: #499BA0;
+    color: white;
+    margin-right: 0.5rem;
+    border: none;
+    transition: none;
+    i{
+        margin-right: 0.5rem;
+    }
+    &:hover{
+        border: none;
+        background-color: #C0DAD1;
+    }
+}
