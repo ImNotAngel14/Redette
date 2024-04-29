@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/Register.css'
 import FormContainer from './components/FormContainer';
 
 const Register = () => {
+    const [isLoggedIn, setLoggedIn] = useState(false);
 
+    if (isLoggedIn) {
+        window.location.replace("/home");
+    }
     // Valores de las credenciales.
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -35,11 +39,12 @@ const Register = () => {
 
                 // Ocultamos el mensaje de credenciales inválidas.
                 wrong_auth_msg.setAttribute('hidden', 'true');
-                alert("Inicio de sesión exitoso.");
+                //alert("Inicio de sesión exitoso.");
 
                 // Aqui deberiamos redirigir la página al home.
-                // ...
-                // return <Navigate to="/home"/>;
+                // 
+                //return <Navigate to="/home"/>;
+                setLoggedIn(true);
             }
             else
             {

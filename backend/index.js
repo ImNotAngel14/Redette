@@ -54,7 +54,7 @@ app.post('/register', async (req, res) =>
   const { username, password } = req.body;
   try
   {
-
+    
   }
   catch (error) {
     console.error('Error al obtener usuario:', error);
