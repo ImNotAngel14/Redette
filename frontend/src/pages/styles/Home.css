@@ -12,4 +12,52 @@
   margin-top: 2.25rem;
 }
 
+input[type="checkbox"] {
+  display:none;
+}
+.InterestsList{
+  display: flex;
+  flex-wrap: wrap;
+  label {
+    color: white;
+    background-color: #499BA0;
+    padding: 0.5rem 1rem;
+    border-radius: 0.4rem;
+    margin: 0.5rem 0.5rem;
+  }
 
+  label:hover{
+    animation: 5s;
+    background-color: #C0DAD1;
+    color: #ffffff;
+    font-weight: bold;
+  }
+}
+input[type="checkbox"]:checked + label {
+  background-color: #C0DAD1;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.buttonInterestAccept{
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+
+  border-radius: 0.4rem;
+    background-color: #caeee1;
+    color: #1d4a4d;
+    margin-right: 0.5rem;
+    border: none;
+    transition: none;
+    i{
+        margin-right: 0.5rem;
+    }
+    &:hover{
+        border: none;
+        background-color: #499BA0;
+        color: white;
+
+    }
+}
