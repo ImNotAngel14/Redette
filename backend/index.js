@@ -38,8 +38,8 @@ app.post('/login', async (req, res) => {
       res.json({ auth: 0  });
     }
     else{
-      console.log("UserID: " + user.id_usuario); // Imprimir el usuario encontrado en la consola
-      res.json({auth: 1, userId: user.id_usuario}); // Devolver el usuario como respuesta al cliente
+      console.log("UserID: " + user[0].id_usuario); // Imprimir el usuario encontrado en la consola
+      res.json({auth: 1, userId: user[0].id_usuario}); // Devolver el usuario como respuesta al cliente
     }
     
   } catch (error) {
