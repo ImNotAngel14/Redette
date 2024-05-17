@@ -51,13 +51,28 @@ app.post('/login', async (req, res) => {
 
 app.post('/register', async (req, res) =>
 {
-  const { username, password } = req.body;
+  const { email, username, password, profileImage } = req.body;
+  console.log("username: " + username);
+  console.log("password: " + password);
+  console.log("email: " + email);
   try
   {
-    
+    const user = await prisma.usuario.create
+    ({
+      data:
+      {
+        usuario: username,
+        contrasena: password,
+        correo: email
+      }
+    });
+    res.json({success: 1});
   }
   catch (error) {
-    console.error('Error al obtener usuario:', error);
+    console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 })
+/*
+  
+*/

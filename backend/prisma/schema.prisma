@@ -12,8 +12,7 @@ model Usuario {
   usuario    String   @db.VarChar(15)
   contrasena String   @db.VarChar(30)
   correo     String   @db.VarChar(45)
-  fechaNac   DateTime
-  fotoPerfil Bytes?   @db.TinyBlob
+  fotoPerfil Bytes?   @db.Blob
 
   @@map("usuario")
 }
