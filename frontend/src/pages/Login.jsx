@@ -36,22 +36,14 @@ const Register = () => {
             const wrong_auth_msg = document.getElementById('id_wrong_auth_msg');
             if(data.auth)
             {
-
                 // Ocultamos el mensaje de credenciales inválidas.
                 wrong_auth_msg.setAttribute('hidden', 'true');
-                //alert("Inicio de sesión exitoso.");
-
-                // Aqui deberiamos redirigir la página al home.
-                // 
-                //return <Navigate to="/home"/>;
                 setLoggedIn(true);
             }
             else
             {
-
                 // Mostrar mensaje de error en credenciales.
                 wrong_auth_msg.removeAttribute('hidden');
-                
             }
         } catch (error) {
             console.error('Error al llamar a la API:', error);
@@ -75,8 +67,7 @@ const Register = () => {
                                     <input id="id_password" type='password' name='password' placeholder='Contraseña' value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="off"/>
                                     <input id="id_submit" type='submit' value='Entrar' onClick={handleSubmit} />
                                 </form>
-                                <p>¿Aún no tienes una cuenta?</p> <Link to="/register">Regístrate aquí</Link>
-                                
+                                <p>¿Aún no tienes una cuenta?</p> <Link to="/register">Regístrate aquí</Link>             
                             </div>
                         </FormContainer>
                     </div>
