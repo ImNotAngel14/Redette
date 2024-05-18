@@ -69,11 +69,43 @@ app.post('/register', async (req, res) =>
     else
       res.status(500).json({success: 0});
   }
-  catch (error) {
+  catch (error) 
+  {
     console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
-})
-/*
-  
-*/
+});
+
+app.post('/community', async (req, res) =>
+{
+  /*
+  id_comunidad  Int     @id @default(autoincrement())
+  nombre        String  @db.VarChar(25)
+  descripcion   String  @db.VarChar(45)
+  fotoComunidad Bytes?  @db.Blob
+  FKUsuario     Int
+  */
+  const { name, description, image, creator} = req.body;
+  try
+  {
+    const community = await prisma.comunidad.create
+    ({
+      data:
+      {
+        nombre: name,
+        descripcion: description,
+        fotoComunidad: image,
+        FKUsuario: creator
+      }
+    });
+    if(community)
+      res.json({success: 1});
+    else
+      res.status(500).json({success: 0});
+  }
+  catch(error)
+  {
+    console.error('Error al crear comunidad:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});

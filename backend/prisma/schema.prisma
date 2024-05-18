@@ -8,11 +8,23 @@ datasource db {
 }
 
 model Usuario {
-  id_usuario Int      @id @default(autoincrement())
-  usuario    String   @db.VarChar(15)
-  contrasena String   @db.VarChar(30)
-  correo     String   @db.VarChar(45)
-  fotoPerfil Bytes?   @db.Blob
+  id_usuario Int         @id @default(autoincrement())
+  usuario    String      @db.VarChar(15)
+  contrasena String      @db.VarChar(30)
+  correo     String      @db.VarChar(45)
+  fotoPerfil Bytes?      @db.Blob
+  comunidad  comunidad[]
 
   @@map("usuario")
+}
+
+model comunidad {
+  id_comunidad  Int     @id @default(autoincrement())
+  nombre        String  @db.VarChar(25)
+  descripcion   String  @db.VarChar(45)
+  fotoComunidad Bytes?  @db.Blob
+  FKUsuario     Int
+  usuario       Usuario @relation(fields: [FKUsuario], references: [id_usuario], onUpdate: Restrict, map: "FK_UsuarioCreador")
+
+  @@index([FKUsuario], map: "FK_UsuarioCreador")
 }
