@@ -52,7 +52,6 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) =>
 {
   const { email, username, password, pImage } = req.body;
-  console.log ("imagen:"+pImage);
   try
   {
     const user = await prisma.usuario.create
@@ -70,8 +69,7 @@ app.post('/register', async (req, res) =>
     else
       res.status(500).json({success: 0});
   }
-  catch (error) 
-  {
+  catch (error)   {
     console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
