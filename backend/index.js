@@ -51,7 +51,8 @@ app.post('/login', async (req, res) => {
 
 app.post('/register', async (req, res) =>
 {
-  const { email, username, password, profileImage } = req.body;
+  const { email, username, password, pImage } = req.body;
+  console.log ("imagen:"+pImage);
   try
   {
     const user = await prisma.usuario.create
@@ -61,7 +62,7 @@ app.post('/register', async (req, res) =>
         usuario: username,
         contrasena: password,
         correo: email,
-        fotoPerfil: profileImage
+        fotoPerfil: pImage
       }
     });
     if(user)

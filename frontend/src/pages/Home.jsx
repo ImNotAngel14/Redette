@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/Home.css'
@@ -5,9 +6,69 @@ import NavBar from './components/Navbar'
 import SideBar from './components/SideBar'
 import PostContainer from './components/PostContainer';
 import PostInputContainer from './components/PostInputContainer';
-
+import Modal from 'react-bootstrap/Modal';
 
 const Home = () => {
+    const [showInterestsModal, setShowInterestsModal] = useState(true);
+    const [selectedInterestError, setSelectedInterestError] = useState(false);
+    const handleCloseInterestsModal = () => setShowInterestsModal(false);
+
+    const initialOptions = ['Videojuegos', 'Deportes', 'Series', 'Películas'];
+    const [checkboxes, setCheckboxes] = useState(
+      initialOptions.reduce((acc, option) => ({ ...acc, [option]: false }), {})
+    );
+  
+    const handleCheckboxChange = (option) => {
+      setCheckboxes(prevCheckboxes => ({
+        ...prevCheckboxes,
+        [option]: !prevCheckboxes[option],
+      }));
+    };  
+
+    const handleInterestsFormSubmit = async (event) => {
+        event.preventDefault();
+        const anyInterestSelected = Object.values(checkboxes).some(value => value);
+        if (anyInterestSelected) {
+
+            // peticion backend
+            try {
+                const response = await fetch('http://localhost:3000/interests', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, username, password, profileImage })
+                });
+
+                // Actuamos en base a la respuesta de la API
+                const data = await response.json();
+                if(data.success)
+                {
+                    // Mostrar mensaje de exito del registro
+                    // ...
+                    handleCloseInterestsModal(); 
+
+                }
+                else
+                {
+
+                    // Mostrar mensaje de error del registro
+                    // ...
+                    
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+                
+            }
+            // peticion backend
+
+            handleCloseInterestsModal(); 
+            setSelectedInterestError(false);
+        } else {
+            setSelectedInterestError(true);
+        }
+    };
+
     return (
         <div className='h_body'>
             <NavBar>
@@ -37,6 +98,35 @@ const Home = () => {
                 </div>
             </div>
 
+            <Modal show={showInterestsModal} onHide={handleCloseInterestsModal} backdrop="static">
+                <form onSubmit={handleInterestsFormSubmit}>
+                    <Modal.Header>
+                        <Modal.Title>Selecciona tus intereses</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className='InterestsList'>
+                            {initialOptions.map((option, index) => (
+                                <div key={index}>
+                                    <input
+                                        type="checkbox"
+                                        id={`interest${index}`}
+                                        checked={checkboxes[option]}
+                                        onChange={() => handleCheckboxChange(option)}
+                                    />
+                                    <label htmlFor={`interest${index}`}>
+                                        {option}
+                                    </label>
+                                </div>
+                            ))}
+                        </div>
+                        {selectedInterestError && <p style={{ color: 'red' }}>Por favor, selecciona al menos un interés</p>}
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <input type="submit" className='buttonInterestAccept' value='Aceptar'/>
+                    </Modal.Footer>
+                </form>
+            </Modal>
+
         </div>
 
     )
@@ -44,4 +134,4 @@ const Home = () => {
 
 }
 
-export default Home
+export default Home;

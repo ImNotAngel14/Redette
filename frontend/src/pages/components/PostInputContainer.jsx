@@ -1,69 +1,178 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import './styles/PostInputContainer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const PostInputContainer= () => {
+const PostInputContainer = () => {
   const [showPostModal, setShowPostModal] = useState(false);
-  const handleClosePostModal = () => setShowPostModal(false);
-  const handleShowPostModal = () => setShowPostModal(true);
+  const handleClosePostModal = () => {
+    setShowPostModal(false);
+    setPostRegError(false);
+    }
+  const handleShowPostModal = () => {
+      setShowPostModal(true);
+      setSelectedFileName('');
+      setSelectedFileBase64('');
+      setSelectedTitle('');
+      setSelectedCommunity('');
+      setSelectedLink('');
+      setSelectedText('');
+      setTitleError(false);
+      setCommunityError(false);
+  };
+
+    // POST
+    const [selectedFileName, setSelectedFileName] = useState('');
+    const [selectedFileBase64, setSelectedFileBase64] = useState('');
+    const [selectedTitle, setSelectedTitle] = useState('');
+    const [selectedText, setSelectedText] = useState('');
+    const [selectedLink, setSelectedLink] = useState('');
+    const [selectedCommunity, setSelectedCommunity] = useState('');
+    const [titleError, setTitleError] = useState(false);
+    const [communityError, setCommunityError] = useState(false);
+
+    const [PostRegError, setPostRegError] = useState(false); // Estado para el error de publicacion
+    // POST
+
+    const handleSubmitPost = async (event) => {
+      event.preventDefault();
+
+      if (!selectedTitle) {
+          setTitleError(true);
+      } else {
+          setTitleError(false);
+      }
+
+      if (!selectedCommunity) {
+          setCommunityError(true);
+      } else {
+          setCommunityError(false);
+      }
+
+      // Si todos los campos obligatorios están completos, puedes enviar el formulario
+      if (selectedTitle && selectedCommunity) {
+          // Aquí puedes agregar la lógica para enviar el formulario
+
+          // peticion backend
+          try {
+              const response = await fetch('http://localhost:3000/post', {
+                  method: 'POST',
+                  headers: {
+                  'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({                         
+                      selectedCommunity,
+                      selectedTitle,
+                      selectedText,
+                      selectedLink,
+                      selectedFileBase64
+                  })
+              });
+
+              // Actuamos en base a la respuesta de la API
+              const data = await response.json();
+              if (data.success) {
+                  // Mostrar mensaje de éxito de creación de comunidad
+                  handleShowPostSuccess(); // Mostrar el modal de éxito
+                  handleClosePostModal(); // Cerrar el modal de creación de post
+                  setPostRegError(false); // Resetear el error
+              } else {
+                  // Mostrar mensaje de error del registro
+                  setPostRegError(true);
+                  console.error('Error en la publicación:', data.message);
+              }
+          } catch (error) {
+              setPostRegError(true);
+              console.error('Error al llamar a la API:', error);
+          }
+      }
+    };
+
+    // imagen publicacion
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+          setSelectedFileName(file.name);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              setSelectedFileBase64(reader.result);
+          };
+          reader.readAsDataURL(file);
+      }
+    };
+
+    const [showPostSuccess, setShowPostSuccessModal] = useState(false);
+    const handleClosePostSuccess = () => setShowPostSuccessModal(false);
+    const handleShowPostSuccess = () => setShowPostSuccessModal(true);
+
   return (
     <div>
-        <div className='PostInputContainer'>
-            <div className='PostInputWrapper'>
-                <h3>Nuevo Post</h3>
-                <div className='InputContainer'>
-                    <i className="fa-regular fa-pen-to-square fa-xl"></i>
-                    <input type='text' placeholder='Comparte algo con el mundo...' readOnly  onClick={handleShowPostModal}/>
+      <div className='PostInputContainer'>
+        <div className='PostInputWrapper'>
+          <h3>Nuevo Post</h3>
+          <div className='InputContainer'>
+            <i className="fa-regular fa-pen-to-square fa-xl"></i>
+            <input type='text' placeholder='Comparte algo con el mundo...' readOnly onClick={handleShowPostModal} />
+          </div>
+          <hr />
+          <div className='ButtonsContainer'>
+            <button onClick={handleShowPostModal} className='buttonPost'><i className="fa-regular fa-image fa-lg"></i><span>Adjuntar Multimedia</span></button>
+            <button onClick={handleShowPostModal} className='buttonPost'><i className="fa-solid fa-link"></i><span>Adjuntar Link</span></button>
+          </div>
+        </div>
+      </div>
+      <Modal show={showPostModal} onHide={handleClosePostModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Crear Nuevo Post</Modal.Title>
+        </Modal.Header>
+        <form onSubmit={handleSubmitPost}>
+        <Modal.Body>
+            <div className="form-group">
+            {PostRegError && <p className="error-text" style={{ color: 'red' }}>Creación de Post fallido. Intente de nuevo</p>}
+            <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
+            <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={selectedCommunity} onChange={(e) => setSelectedCommunity(e.target.value)}>
+                <option disabled value="">Selecciona una comunidad</option>
+                <option value="Comunidad 1">Comunidad 1</option>
+                <option value="Comunidad 2">Comunidad 2</option>
+                <option value="Comunidad 3">Comunidad 3</option>
+            </select>
+            {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
+            <textarea className={`form-control ${titleError ? 'error' : ''}`} value={selectedTitle} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
+            {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
+            <textarea className="form-control" rows="3" placeholder='Texto' value={selectedText} onChange={(e) => setSelectedText(e.target.value)}></textarea>
+            <div className='AddtoPostContainer'>
+                <div className='FileInputContainer'>
+                    <input
+                        type='file'
+                        accept="image/*"
+                        id='post_file'
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
+                    <label htmlFor='post_file'>
+                        <i className="fa-regular fa-image fa-lg"></i>
+                        <span>Adjuntar Multimedia</span><br />
+                    </label>
+                    <p>{selectedFileName}</p>
                 </div>
-                <hr/>
-                <div className='ButtonsContainer'>
-                    <button onClick={handleShowPostModal} className='buttonPost'><i className="fa-regular fa-image fa-lg"></i><span>Adjuntar Multimedia</span></button>
-                    <button onClick={handleShowPostModal} className='buttonPost'><i className="fa-solid fa-link" ></i><span>Adjuntar Link</span></button>
-                    {/* <input type='url' id='post_url'/> */}
+                <div className='UrlInputContainer'>
+                    <label htmlFor='post_url'><i className="fa-solid fa-link"></i></label>
+                    <input type='url' className='input_url' id='post_url' value={selectedLink} onChange={(e) => setSelectedLink(e.target.value)} placeholder='Adjuntar link' />
                 </div>
             </div>
-        </div>
-        <Modal show={showPostModal} onHide={handleClosePostModal}>
-            <Modal.Header closeButton>
-            <Modal.Title>Crear Nuevo Post</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-            <form>
-                <div className="form-group">
-                    <textarea className="form-control" rows="1" placeholder='Tema'></textarea>
-                    <label for="CommunityList">Comunidad</label>
-                    <select id="CommunityList">
-                        <option value="Community">Comunidad 1</option>
-                        <option value="Community">Comunidad 2</option>
-                        <option value="Community">Comunidad 3</option>
-                    </select>
-                    <textarea className="form-control" id="TittlePostInput" rows="1" placeholder='Título'></textarea>
-                    <textarea className="form-control" id="TextPostInput" rows="3" placeholder='Texto (opcional)'></textarea>
-                    <div className='AddtoPostContainer'>
-                        <div className='FileInputContainer'>
-                            <input type='file' id='post_file'/>
-                            <label htmlFor='post_file'><i className="fa-regular fa-image fa-lg"></i><span>Adjuntar Multimedia</span></label>
-                        </div>
-                        <div className='UrlInputContainer'>
-                            <label htmlFor='post_url'><i className="fa-solid fa-link"></i></label>
-                            <input type='url' className='input_url' id='post_url' placeholder='Adjuntar link'/>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            </Modal.Body>
-            <Modal.Footer>
-            <button className='buttonPost' onClick={handleClosePostModal}>
-                Cerrar
-            </button>
-            <button className='buttonPostAccept' onClick={handleClosePostModal}>
-                Publicar
-            </button>
-            </Modal.Footer>
-        </Modal>
+            </div>
+        </Modal.Body>
+        <Modal.Footer>
+            <input type='submit' className='buttonPostAccept' value='Publicar' />
+        </Modal.Footer>
+        </form>
+      </Modal>
 
+      <Modal show={showPostSuccess} onHide={handleClosePostSuccess}>
+          <Modal.Header closeButton>
+              <Modal.Title>Post publicado exitosamente</Modal.Title>
+          </Modal.Header>
+      </Modal>
     </div>
   );
 }
