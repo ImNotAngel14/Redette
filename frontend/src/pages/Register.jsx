@@ -68,6 +68,15 @@ const Register = () => {
         
         if (email && username && password && confirmPassword && usernameRegex.test(username) && password.length >= 8 && password === confirmPassword) {
             
+            const formData = {
+                email,
+                username,
+                password,
+                profileImage
+            };
+            console.log("Datos del formulario:", formData);
+
+            let pImage = profileImage.substring(22);
             // peticion backend
             try {
                 const response = await fetch('http://localhost:3000/register', {
@@ -75,7 +84,7 @@ const Register = () => {
                     headers: {
                     'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email, username, password, profileImage })
+                    body: JSON.stringify({ email, username, password, pImage })
                 });
 
                 // Actuamos en base a la respuesta de la API
@@ -120,15 +129,15 @@ const Register = () => {
                             ) : (
                             <div className='formWrapper'>
                                 <form onSubmit={handleSubmit}>
-                                    <input type='email' placeholder='Correo' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <input type='email' placeholder='Correo' value={email} name='email' onChange={(e) => setEmail(e.target.value)} />
                                     {emailError && <p className="errorText" style={{ color: 'red' }}>{emailError}</p>}
-                                    <input type='text' placeholder='Nombre de Usuario' value={username} onChange={(e) => setUsername(e.target.value)} />
+                                    <input type='text' placeholder='Nombre de Usuario' value={username} name='username' onChange={(e) => setUsername(e.target.value)} />
                                     {usernameError && <p className="errorText" style={{ color: 'red' }}>{usernameError}</p>}
-                                    <input type='password' placeholder='Contraseña' value={password} onChange={(e) => setPassword(e.target.value)} />
+                                    <input type='password' placeholder='Contraseña' value={password} name='password' onChange={(e) => setPassword(e.target.value)} />
                                     {passwordError && <p className="errorText" style={{ color: 'red' }}>{passwordError}</p>}
                                     <input type='password' placeholder='Confirmar contraseña' value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                                     {confirmPasswordError && <p className="errorText" style={{ color: 'red' }}>{confirmPasswordError}</p>}
-                                    <input type='file' id='file' onChange={handleImageChange} />
+                                    <input type='file' id='file' onChange={handleImageChange} name='profileImage' />
                                     <label htmlFor='file'>
                                         <i className="fa-regular fa-image fa-lg"></i>
                                         <span>Foto de perfil</span>
