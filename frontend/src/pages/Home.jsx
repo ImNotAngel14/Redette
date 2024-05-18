@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 const Home = () => {
     const [showInterestsModal, setShowInterestsModal] = useState(true);
     const [selectedInterestError, setSelectedInterestError] = useState(false);
+    const [InterestError, setInterestError] = useState(false);
     const handleCloseInterestsModal = () => setShowInterestsModal(false);
 
     const initialOptions = ['Videojuegos', 'Deportes', 'Series', 'Películas'];
@@ -27,46 +28,39 @@ const Home = () => {
 
     const handleInterestsFormSubmit = async (event) => {
         event.preventDefault();
-        const anyInterestSelected = Object.values(checkboxes).some(value => value);
-        if (anyInterestSelected) {
+        const selectedInterests = Object.keys(checkboxes).filter(option => checkboxes[option]);
+        const anyInterestSelected = selectedInterests.length > 0;            
+        // peticion backend
 
-            // peticion backend
+        if (anyInterestSelected) {
+            handleCloseInterestsModal();
+            setSelectedInterestError(false);
+
             try {
                 const response = await fetch('http://localhost:3000/interests', {
                     method: 'POST',
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, username, password, profileImage })
+                    body: JSON.stringify({ interests: selectedInterests }),
                 });
 
-                // Actuamos en base a la respuesta de la API
                 const data = await response.json();
-                if(data.success)
-                {
-                    // Mostrar mensaje de exito del registro
-                    // ...
-                    handleCloseInterestsModal(); 
-
-                }
-                else
-                {
-
-                    // Mostrar mensaje de error del registro
-                    // ...
-                    
+                if (data.success) {
+                    handleCloseInterestsModal();
+                    setInterestError(false);
+                } else {
+                    console.error('Error en el registro de intereses:', data.message);
+                    setInterestError(true);
                 }
             } catch (error) {
                 console.error('Error al llamar a la API:', error);
-                
+                setInterestError(true);
             }
-            // peticion backend
-
-            handleCloseInterestsModal(); 
-            setSelectedInterestError(false);
         } else {
             setSelectedInterestError(true);
-        }
+        }   
+        // peticion backend
     };
 
     return (
@@ -104,6 +98,7 @@ const Home = () => {
                         <Modal.Title>Selecciona tus intereses</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        {InterestError && <p style={{ color: 'red' }}>Error al cargar los intereses</p>}
                         <div className='InterestsList'>
                             {initialOptions.map((option, index) => (
                                 <div key={index}>

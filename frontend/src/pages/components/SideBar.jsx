@@ -81,8 +81,19 @@ const SideBar = () => {
 
         // Si todos los campos obligatorios están completos, puedes enviar el formulario
         if (selectedTitle && selectedCommunity) {
-            // Aquí puedes agregar la lógica para enviar el formulario
+            let postImage = selectedFileBase64.substring(22);
 
+            // Aquí puedes agregar la lógica para enviar el formulario
+            // Obtener los valores de los campos del formulario
+            const formData = {
+                selectedCommunity,
+                selectedTitle,
+                selectedText,
+                selectedLink,
+                postImage
+            };
+            console.log("Datos del formulario de nueva comunidad:", formData);
+            // peticion backend
             // peticion backend
             try {
                 const response = await fetch('http://localhost:3000/post', {
@@ -95,7 +106,7 @@ const SideBar = () => {
                         selectedTitle,
                         selectedText,
                         selectedLink,
-                        selectedFileBase64
+                        postImage
                     })
                 });
 
@@ -144,17 +155,22 @@ const SideBar = () => {
             return;
         }
 
-        // Obtener los valores de los campos del formulario
-        const formData = {
-            selectedName,
-            selectedDesc,
-            commImageBase64,
-            tags
-        };
+
 
         // Si todos los campos obligatorios están completos, puedes enviar el formulario
         if (selectedName && selectedDesc && commImageBase64 && (tags.length > 0)) {
         // Imprimir los valores en la consola
+        let comImage = commImageBase64.substring(22);
+        var creator = 1;
+
+            // Obtener los valores de los campos del formulario
+            const formData = {
+                selectedName,
+                selectedDesc,
+                comImage,
+                // tags
+                creator
+            };
             console.log("Datos del formulario de nueva comunidad:", formData);
             // peticion backend
             try {
@@ -163,7 +179,7 @@ const SideBar = () => {
                     headers: {
                     'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ selectedName, selectedDesc, commImageBase64, tags})
+                    body: JSON.stringify({ selectedName, selectedDesc, comImage, creator})
                 });
 
                 // Actuamos en base a la respuesta de la API
