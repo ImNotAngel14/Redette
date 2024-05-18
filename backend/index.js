@@ -52,9 +52,6 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) =>
 {
   const { email, username, password, profileImage } = req.body;
-  console.log("username: " + username);
-  console.log("password: " + password);
-  console.log("email: " + email);
   try
   {
     const user = await prisma.usuario.create
@@ -63,10 +60,14 @@ app.post('/register', async (req, res) =>
       {
         usuario: username,
         contrasena: password,
-        correo: email
+        correo: email,
+        fotoPerfil: profileImage
       }
     });
-    res.json({success: 1});
+    if(user)
+      res.json({success: 1});
+    else
+      res.status(500).json({success: 0});
   }
   catch (error) {
     console.error('Error al registrar usuario:', error);
