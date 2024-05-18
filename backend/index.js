@@ -52,6 +52,7 @@ app.post('/login', async (req, res) => {
 app.post('/register', async (req, res) =>
 {
   const { email, username, password, pImage } = req.body;
+  console.log ("imagen:"+pImage);
   try
   {
     const user = await prisma.usuario.create
@@ -69,7 +70,8 @@ app.post('/register', async (req, res) =>
     else
       res.status(500).json({success: 0});
   }
-  catch (error)   {
+  catch (error) 
+  {
     console.error('Error al registrar usuario:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
@@ -180,6 +182,7 @@ app.get('/user/:id', async (req, res) =>
   }
 });
 
+
 app.get('/post/:id', async(req,res)=>
 {
   const postId = req.params.id;
@@ -195,19 +198,6 @@ app.get('/post/:id', async(req,res)=>
       res.json({success: 1, post_data: post[0]}); 
     else
       res.json({success: 0});
-  }
-  catch(error)
-  {
-    res.status(500).json({error: 'Error interno del servidor'});
-  }
-});
-
-app.get('/post/community/:id_community', async(req, res) =>
-{
-  const communityId = req.params.id_community;
-  try
-  {
-
   }
   catch(error)
   {
