@@ -17,6 +17,7 @@ const Register = () => {
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const [registrationError, setRegistrationError] = useState('');
 
 
     const handleImageChange = (event) => {
@@ -30,32 +31,76 @@ const Register = () => {
         }
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+        
         event.preventDefault();
-    
+
         const usernameRegex = /^[a-zA-Z0-9]+$/;
     
         if (!email) {
             setEmailError('Campo obligatorio');
+        }else {
+            setEmailError('');
         }
         if (!username) {
             setUsernameError('Campo obligatorio');
         } else if (!usernameRegex.test(username)) {
             setUsernameError('El nombre de usuario solo puede contener letras y números');
+        }else {
+            setUsernameError('');
         }
+
         if (!password) {
             setPasswordError('Campo obligatorio');
         } else if (password.length < 8) {
             setPasswordError('La contraseña debe tener al menos 8 caracteres');
+        }else {
+            setPasswordError('');
         }
+
         if (!confirmPassword) {
             setConfirmPasswordError('Campo obligatorio');
         } else if (password !== confirmPassword) {
             setConfirmPasswordError('Las contraseñas no coinciden');
+        } else {
+            setConfirmPasswordError('');
         }
-    
+        
         if (email && username && password && confirmPassword && usernameRegex.test(username) && password.length >= 8 && password === confirmPassword) {
-            setRegistrationSuccess(true);
+            
+            // peticion backend
+            try {
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, username, password, profileImage })
+                });
+
+                // Actuamos en base a la respuesta de la API
+                const data = await response.json();
+                if(data.success)
+                {
+                    setRegistrationSuccess(true);
+                    setRegistrationError('');
+                    window.location.replace("/login");
+                }
+                else
+                {
+
+                    // Mostrar mensaje de error del registro
+                    // ...
+                    setRegistrationError('Registro fallido, credenciales invalidas');
+                    
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+                setRegistrationError('Error en el servidor, intente nuevamente más tarde.');
+            }
+            // peticion backend
+            
+            
         }
     };
     
@@ -97,6 +142,7 @@ const Register = () => {
                                     )}
                                     <input type='submit' value='Registrate' />
                                 </form>
+                                {registrationError && <p className="errorText" style={{ color: 'red' }}>{registrationError}</p>}
                                 <p>¿Ya tienes una cuenta?</p> <Link to="/login">Inicia sesión</Link>
                             </div>
                              )}

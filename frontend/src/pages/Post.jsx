@@ -35,7 +35,7 @@ const Post = () => {
                         </CommentContainer>
                         </div>
                     </div>
-                    <div class="col-lg-1  d-lg-block d-none" >
+                    <div className="col-lg-1  d-lg-block d-none" >
                     {/* Espacio entre las columnas visible solo en pantallas LG o más grandes */}
                     </div>
                     <div className='col-lg-3 col-md-4 order-last'>

@@ -5,54 +5,105 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const PostInputContainer = () => {
   const [showPostModal, setShowPostModal] = useState(false);
-  const handleClosePostModal = () => setShowPostModal(false);
+  const handleClosePostModal = () => {
+    setShowPostModal(false);
+    setPostRegError(false);
+    }
   const handleShowPostModal = () => {
-    setShowPostModal(true);
-    setSelectedFileName('');
-    setSelectedTheme('');
-    setSelectedTitle('');
-    setSelectedCommunity('');
-    setThemeError(false);
-    setTitleError(false);
-    setCommunityError(false);
-  };
-
-  const [selectedFileName, setSelectedFileName] = useState('');
-  const [selectedTheme, setSelectedTheme] = useState('');
-  const [selectedTitle, setSelectedTitle] = useState('');
-  const [selectedCommunity, setSelectedCommunity] = useState('');
-  const [themeError, setThemeError] = useState(false);
-  const [titleError, setTitleError] = useState(false);
-  const [communityError, setCommunityError] = useState(false);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Verificar campos obligatorios
-    if (!selectedTheme) {
-      setThemeError(true);
-    } else {
-      setThemeError(false);
-    }
-
-    if (!selectedTitle) {
-      setTitleError(true);
-    } else {
+      setShowPostModal(true);
+      setSelectedFileName('');
+      setSelectedFileBase64('');
+      setSelectedTitle('');
+      setSelectedCommunity('');
+      setSelectedLink('');
+      setSelectedText('');
       setTitleError(false);
-    }
-
-    if (!selectedCommunity) {
-      setCommunityError(true);
-    } else {
       setCommunityError(false);
-    }
-
-    // Si todos los campos obligatorios están completos, puedes enviar el formulario
-    if (selectedTheme && selectedTitle && selectedCommunity) {
-      // Aquí puedes agregar la lógica para enviar el formulario
-      handleClosePostModal();
-    }
   };
+
+    // POST
+    const [selectedFileName, setSelectedFileName] = useState('');
+    const [selectedFileBase64, setSelectedFileBase64] = useState('');
+    const [selectedTitle, setSelectedTitle] = useState('');
+    const [selectedText, setSelectedText] = useState('');
+    const [selectedLink, setSelectedLink] = useState('');
+    const [selectedCommunity, setSelectedCommunity] = useState('');
+    const [titleError, setTitleError] = useState(false);
+    const [communityError, setCommunityError] = useState(false);
+
+    const [PostRegError, setPostRegError] = useState(false); // Estado para el error de publicacion
+    // POST
+
+    const handleSubmitPost = async (event) => {
+      event.preventDefault();
+
+      if (!selectedTitle) {
+          setTitleError(true);
+      } else {
+          setTitleError(false);
+      }
+
+      if (!selectedCommunity) {
+          setCommunityError(true);
+      } else {
+          setCommunityError(false);
+      }
+
+      // Si todos los campos obligatorios están completos, puedes enviar el formulario
+      if (selectedTitle && selectedCommunity) {
+          // Aquí puedes agregar la lógica para enviar el formulario
+
+          // peticion backend
+          try {
+              const response = await fetch('http://localhost:3000/post', {
+                  method: 'POST',
+                  headers: {
+                  'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({                         
+                      selectedCommunity,
+                      selectedTitle,
+                      selectedText,
+                      selectedLink,
+                      selectedFileBase64
+                  })
+              });
+
+              // Actuamos en base a la respuesta de la API
+              const data = await response.json();
+              if (data.success) {
+                  // Mostrar mensaje de éxito de creación de comunidad
+                  handleShowPostSuccess(); // Mostrar el modal de éxito
+                  handleClosePostModal(); // Cerrar el modal de creación de post
+                  setPostRegError(false); // Resetear el error
+              } else {
+                  // Mostrar mensaje de error del registro
+                  setPostRegError(true);
+                  console.error('Error en la publicación:', data.message);
+              }
+          } catch (error) {
+              setPostRegError(true);
+              console.error('Error al llamar a la API:', error);
+          }
+      }
+    };
+
+    // imagen publicacion
+    const handleFileChange = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+          setSelectedFileName(file.name);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              setSelectedFileBase64(reader.result);
+          };
+          reader.readAsDataURL(file);
+      }
+    };
+
+    const [showPostSuccess, setShowPostSuccessModal] = useState(false);
+    const handleClosePostSuccess = () => setShowPostSuccessModal(false);
+    const handleShowPostSuccess = () => setShowPostSuccessModal(true);
 
   return (
     <div>
@@ -74,47 +125,53 @@ const PostInputContainer = () => {
         <Modal.Header closeButton>
           <Modal.Title>Crear Nuevo Post</Modal.Title>
         </Modal.Header>
-        <form onSubmit={handleSubmit}>
-          <Modal.Body>
+        <form onSubmit={handleSubmitPost}>
+        <Modal.Body>
             <div className="form-group">
-              <textarea className={`form-control txta-tema ${themeError ? 'error' : ''}`} rows="1" placeholder='Tema' value={selectedTheme} onChange={(e) => setSelectedTheme(e.target.value)}></textarea>
-              {themeError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-              <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
-              <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={selectedCommunity} onChange={(e) => setSelectedCommunity(e.target.value)}>
-                <option value="">Selecciona una comunidad</option>
+            {PostRegError && <p className="error-text" style={{ color: 'red' }}>Creación de Post fallido. Intente de nuevo</p>}
+            <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
+            <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={selectedCommunity} onChange={(e) => setSelectedCommunity(e.target.value)}>
+                <option disabled value="">Selecciona una comunidad</option>
                 <option value="Comunidad 1">Comunidad 1</option>
                 <option value="Comunidad 2">Comunidad 2</option>
                 <option value="Comunidad 3">Comunidad 3</option>
-              </select>
-              {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-              <textarea className={`form-control ${titleError ? 'error' : ''}`} value={selectedTitle} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
-              {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-              <textarea className="form-control" rows="3" placeholder='Texto (opcional)'></textarea>
-              <div className='AddtoPostContainer'>
+            </select>
+            {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
+            <textarea className={`form-control ${titleError ? 'error' : ''}`} value={selectedTitle} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
+            {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
+            <textarea className="form-control" rows="3" placeholder='Texto' value={selectedText} onChange={(e) => setSelectedText(e.target.value)}></textarea>
+            <div className='AddtoPostContainer'>
                 <div className='FileInputContainer'>
-                  <input
-                    type='file'
-                    id='post_file'
-                    style={{ display: 'none' }}
-                    onChange={(e) => setSelectedFileName(e.target.files[0]?.name || '')}
-                  />
-                  <label htmlFor='post_file'>
-                    <i className="fa-regular fa-image fa-lg"></i>
-                    <span>Adjuntar Multimedia</span><br />
-                  </label>
-                  <p>{selectedFileName}</p>
+                    <input
+                        type='file'
+                        accept="image/*"
+                        id='post_file'
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
+                    <label htmlFor='post_file'>
+                        <i className="fa-regular fa-image fa-lg"></i>
+                        <span>Adjuntar Multimedia</span><br />
+                    </label>
+                    <p>{selectedFileName}</p>
                 </div>
                 <div className='UrlInputContainer'>
-                  <label htmlFor='post_url'><i className="fa-solid fa-link"></i></label>
-                  <input type='url' className='input_url' id='post_url' placeholder='Adjuntar link' />
+                    <label htmlFor='post_url'><i className="fa-solid fa-link"></i></label>
+                    <input type='url' className='input_url' id='post_url' value={selectedLink} onChange={(e) => setSelectedLink(e.target.value)} placeholder='Adjuntar link' />
                 </div>
-              </div>
             </div>
-          </Modal.Body>
-          <Modal.Footer>
+            </div>
+        </Modal.Body>
+        <Modal.Footer>
             <input type='submit' className='buttonPostAccept' value='Publicar' />
-          </Modal.Footer>
+        </Modal.Footer>
         </form>
+      </Modal>
+
+      <Modal show={showPostSuccess} onHide={handleClosePostSuccess}>
+          <Modal.Header closeButton>
+              <Modal.Title>Post publicado exitosamente</Modal.Title>
+          </Modal.Header>
       </Modal>
     </div>
   );

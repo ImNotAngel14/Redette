@@ -25,11 +25,44 @@ const Home = () => {
       }));
     };  
 
-    const handleInterestsFormSubmit = (event) => {
+    const handleInterestsFormSubmit = async (event) => {
         event.preventDefault();
         const anyInterestSelected = Object.values(checkboxes).some(value => value);
         if (anyInterestSelected) {
-            handleCloseInterestsModal(); // Puedes agregar aquí la lógica para guardar los cambios si lo deseas
+
+            // peticion backend
+            try {
+                const response = await fetch('http://localhost:3000/interests', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, username, password, profileImage })
+                });
+
+                // Actuamos en base a la respuesta de la API
+                const data = await response.json();
+                if(data.success)
+                {
+                    // Mostrar mensaje de exito del registro
+                    // ...
+                    handleCloseInterestsModal(); 
+
+                }
+                else
+                {
+
+                    // Mostrar mensaje de error del registro
+                    // ...
+                    
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+                
+            }
+            // peticion backend
+
+            handleCloseInterestsModal(); 
             setSelectedInterestError(false);
         } else {
             setSelectedInterestError(true);

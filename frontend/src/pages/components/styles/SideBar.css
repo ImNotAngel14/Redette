@@ -135,5 +135,73 @@
     &:hover{
         border: none;
         background-color: #C0DAD1;
+        color: #1d4a4d;
     }
 }
+
+/* EXPERIMENTO */
+.tag-container {
+  /* border: 1px solid #ccc;
+  padding: 0.75rem;
+  border-radius: 0.25rem; */
+  p{
+    color: rgb(83, 83, 83);
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: #caeee1;
+  color: #1d4a4d;;
+  padding: 0.25rem 0.75rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+.tag-delete-btn{
+  margin-left: 0.5rem;
+  font-size: small;
+  border: 2px solid #499BA0;;
+  color: #1d4a4d;
+  padding: 0.25rem 0.5rem;
+  &:hover{
+    background-color: #499BA0;
+    color: white;
+    border: 2px solid #499BA0;;
+}
+}
+
+.tag-input {
+  margin-top: 0.5rem;
+  width: 80%;
+  height: 1.75rem;
+  border: 1px solid #cccccc;
+  &:focus{
+    outline: none;
+  }
+}
+
+.tag-add-btn{
+margin-left: 1rem;
+background-color: #499BA0;
+color: white;
+width: 2rem;
+height: 2rem;
+text-align: center;
+border: none;
+padding: 0;
+&:hover{
+border: none;
+color: #1d4a4d;
+background-color: #C0DAD1;
+}
+}
+
+/* EXPERIMENTO */

@@ -2,16 +2,17 @@ import React from 'react';
 import './styles/PostContainer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserImgPost from "./img/userimage.jpeg"
+import PostImg from "./img/userimage.jpeg"
 
 
 const PostContainer = () => {
     return (
         <div className='PostContainer'>
             <div className='PostWrapper'>
-                <div className='PostTopic'>
+                {/* <div className='PostTopic'>
                     <p>Tema del Post</p>
                 </div>
-                <hr/>
+                <hr/> */}
                 <div className='row'>
                     <div className='col-1'>
                         <img className='UserImgPost' src={UserImgPost} alt=''/>
@@ -30,6 +31,12 @@ const PostContainer = () => {
                 <div className='PostContent'>
                     <div className='PostText'>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam veritatis consectetur omnis illum placeat repellendus fuga reiciendis perferendis consequuntur a praesentium, voluptate, velit doloremque ab dolorem in vero qui. Aliquam.</p>
+                    </div>
+                    <div className='PostImage'>
+                        <img className='PostImg' src={PostImg} alt=''/>
+                    </div>
+                    <div className='PostLink'>
+                        <span>Link:</span><a href='http://google.com'>google.com</a>
                     </div>
                 </div>
                 <hr/>

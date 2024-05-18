@@ -8,17 +8,23 @@
         border-radius: 0.75rem;
         
         .InputContainer{
+          display: flex;
+          flex-direction: row;
+
           i{
             margin-right: 10px;
+            margin-top: 10px;
+
+            line-height: 0;
           }
-      
-          input[type="text"]{
+
+          textarea{
             width: 90%;
             box-sizing: border-box;
             padding: 0.5rem;
             border-radius: 1.5rem;
             border: 1px solid rgb(233, 233, 233);
-            background-color: rgb(233, 233, 233);
+            /* background-color: rgb(233, 233, 233); */
             &::placeholder{
               color: #5f5f5f;
             }
@@ -48,8 +54,6 @@
     }
     
     .AddtoPostContainer{
-        display:flex;
-        flex-direction: row;
         margin-top: 0.5rem;
     
         .FileInputContainer{
@@ -94,8 +98,6 @@
 
         .CommentButton{
             padding-top: 0.25rem;
-            margin-left: 2.5rem;
-    
             .buttonPostAccept{
                 border-radius: 0.25rem;
                 padding: 0.25rem 1.5rem;
@@ -114,3 +116,9 @@
             }
         }
       }
+
+.Toast{
+  /* position: fixed; */
+  margin-left: 4.5rem;
+  margin-bottom: 0.5rem;
+}

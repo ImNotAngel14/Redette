@@ -26,6 +26,24 @@
     }
   }
   
+  .PostImage{
+    margin-bottom: 1rem;
+    .PostImg{
+      max-width: 14rem;
+      max-height: 12rem;
+    }
+  }
+  .PostLink{
+    border: 1px gainsboro solid;
+    border-radius: 0.25rem;
+    a{
+      margin-left: 0.5rem;
+    }
+    span{
+      margin-left: 0.5rem;
+    }
+  }
+  
   .Buttons{
     button{
       border: 1px solid rgb(156, 156, 156);
