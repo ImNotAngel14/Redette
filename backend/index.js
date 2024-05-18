@@ -79,16 +79,16 @@ app.post('/register', async (req, res) =>
 
 app.post('/community', async (req, res) =>
 {
-  const { name, description, image, creator} = req.body;
+  const { selectedName, selectedDesc, comImage, creator} = req.body;
   try
   {
     const community = await prisma.comunidad.create
     ({
       data:
       {
-        nombre: name,
-        descripcion: description,
-        fotoComunidad: image,
+        nombre: selectedName,
+        descripcion: selectedDesc,
+        fotoComunidad: comImage,
         FKUsuario: creator
       }
     });
@@ -106,7 +106,7 @@ app.post('/community', async (req, res) =>
 
 app.post('/post', async (req, res) =>
 {
-  const { title, body, image, link, author, community} = req.body;
+  const { selectedTitle, selectedText, postImage, selectedLink, author, selectedCommunity} = req.body;
 
   try
   {
@@ -114,12 +114,12 @@ app.post('/post', async (req, res) =>
     ({
       data:
       {
-        titulo: title,
-        texto: body,
-        imagen: image,
-        link: link,
+        titulo: selectedTitle,
+        texto: selectedText,
+        imagen: postImage,
+        link: selectedLink,
         FKUsuario: author,
-        FKComunidad: community
+        FKComunidad: selectedCommunity
       }
     });
     if(post)
