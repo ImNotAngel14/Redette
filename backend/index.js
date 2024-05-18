@@ -22,6 +22,7 @@ app.listen(port, () => {
   console.log(`La aplicación está escuchando en http://localhost:${port}`);
 });
 
+// 
 app.post('/login', async (req, res) => {
   // Obtener los datos de inicio de sesión del cuerpo de la solicitud.
   const { username, password } = req.body;
@@ -47,7 +48,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
-
 
 app.post('/register', async (req, res) =>
 {
@@ -79,16 +79,16 @@ app.post('/register', async (req, res) =>
 
 app.post('/community', async (req, res) =>
 {
-  const { selectedName, selectedDesc, comImage, creator} = req.body;
+  const { name, description, image, creator} = req.body;
   try
   {
     const community = await prisma.comunidad.create
     ({
       data:
       {
-        nombre: selectedName,
-        descripcion: selectedDesc,
-        fotoComunidad: comImage,
+        nombre: name,
+        descripcion: description,
+        fotoComunidad: image,
         FKUsuario: creator
       }
     });
@@ -106,7 +106,7 @@ app.post('/community', async (req, res) =>
 
 app.post('/post', async (req, res) =>
 {
-  const { selectedTitle, selectedText, postImage, selectedLink, author, selectedCommunity} = req.body;
+  const { title, body, image, link, author, community} = req.body;
 
   try
   {
@@ -114,12 +114,12 @@ app.post('/post', async (req, res) =>
     ({
       data:
       {
-        titulo: selectedTitle,
-        texto: selectedText,
-        imagen: postImage,
-        link: selectedLink,
+        titulo: title,
+        texto: body,
+        imagen: image,
+        link: link,
         FKUsuario: author,
-        FKComunidad: selectedCommunity
+        FKComunidad: community
       }
     });
     if(post)
@@ -181,7 +181,6 @@ app.get('/user/:id', async (req, res) =>
     res.status(500).json({error: 'Error interno del servidor'});
   }
 });
-
 
 app.get('/post/:id', async(req,res)=>
 {
