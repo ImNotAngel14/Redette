@@ -8,23 +8,84 @@ datasource db {
 }
 
 model Usuario {
-  id_usuario Int         @id @default(autoincrement())
-  usuario    String      @db.VarChar(15)
-  contrasena String      @db.VarChar(30)
-  correo     String      @db.VarChar(45)
-  fotoPerfil Bytes?      @db.Blob
-  comunidad  comunidad[]
+  id_usuario        Int                 @id @default(autoincrement())
+  usuario           String              @db.VarChar(15)
+  contrasena        String              @db.VarChar(30)
+  correo            String              @db.VarChar(45)
+  fotoPerfil        Bytes?              @db.Blob
+  comunidad         comunidad[]
+  publicacion       publicacion[]
+  miembros          miembros[]
+  interesesUsuarios interesesUsuarios[]
 
   @@map("usuario")
 }
 
 model comunidad {
-  id_comunidad  Int     @id @default(autoincrement())
-  nombre        String  @db.VarChar(25)
-  descripcion   String  @db.VarChar(45)
-  fotoComunidad Bytes?  @db.Blob
-  FKUsuario     Int
-  usuario       Usuario @relation(fields: [FKUsuario], references: [id_usuario], onUpdate: Restrict, map: "FK_UsuarioCreador")
+  id_comunidad       Int                  @id @default(autoincrement())
+  nombre             String               @db.VarChar(25)
+  descripcion        String               @db.VarChar(45)
+  fotoComunidad      Bytes?               @db.Blob
+  FKUsuario          Int
+  usuario            Usuario              @relation(fields: [FKUsuario], references: [id_usuario], onUpdate: Restrict, map: "FK_UsuarioCreador")
+  publicacion        publicacion[]
+  miembros           miembros[]
+  interesesComunidad interesesComunidad[]
 
   @@index([FKUsuario], map: "FK_UsuarioCreador")
+}
+
+model publicacion {
+  id_publicacion Int       @id @default(autoincrement())
+  titulo         String    @db.VarChar(30)
+  texto          String?   @db.VarChar(100)
+  imagen         Bytes?    @db.Blob
+  link           String?   @db.VarChar(30)
+  FKUsuario      Int
+  FKComunidad    Int
+  usuario        Usuario   @relation(fields: [FKUsuario], references: [id_usuario], onUpdate: Restrict, map: "FK_UsuarioPost")
+  comunidad      comunidad @relation(fields: [FKComunidad], references: [id_comunidad], onUpdate: Restrict, map: "FK_ComunidadPost")
+
+  @@index([FKUsuario], map: "FK_UsuarioPost")
+  @@index([FKComunidad], map: "FK_ComunidadPost")
+}
+
+model miembros {
+  id_miembro  Int       @id @default(autoincrement())
+  FKUsuario   Int
+  FKComunidad Int
+  usuario     Usuario   @relation(fields: [FKUsuario], references: [id_usuario], onUpdate: Restrict, map: "FK_UsuarioMiembro")
+  comunidad   comunidad @relation(fields: [FKComunidad], references: [id_comunidad], onUpdate: Restrict, map: "FK_ComunidadElegida")
+
+  @@index([FKUsuario], map: "FK_UsuarioMiembro")
+  @@index([FKComunidad], map: "FK_ComunidadElegida")
+}
+
+model tema {
+  id_tema            Int                  @id @default(autoincrement())
+  nombreTema         String               @db.VarChar(20)
+  interesesComunidad interesesComunidad[]
+  interesesUsuarios  interesesUsuarios[]
+}
+
+model interesesComunidad {
+  id_interes  Int       @id @default(autoincrement())
+  FKComunidad Int
+  FKTema      Int
+  comunidad   comunidad @relation(fields: [FKComunidad], references: [id_comunidad], onUpdate: Restrict, map: "FK_InteresesComunidad")
+  tema        tema      @relation(fields: [FKTema], references: [id_tema], onUpdate: Restrict, map: "FK_TemaComunidad")
+
+  @@index([FKComunidad], map: "FK_InteresesComunidad")
+  @@index([FKTema], map: "FK_TemaComunidad")
+}
+
+model interesesUsuarios {
+  id_interes Int     @id @default(autoincrement())
+  FKTema     Int
+  FKUsuario  Int
+  tema       tema    @relation(fields: [FKTema], references: [id_tema], onUpdate: Restrict, map: "FK_TemaInteres")
+  usuario    Usuario @relation(fields: [FKUsuario], references: [id_usuario], onUpdate: Restrict, map: "FK_UsuarioInteresado")
+
+  @@index([FKTema], map: "FK_TemaInteres")
+  @@index([FKUsuario], map: "FK_UsuarioInteresado")
 }
