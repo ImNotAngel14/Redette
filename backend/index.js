@@ -22,6 +22,7 @@ app.listen(port, () => {
   console.log(`La aplicación está escuchando en http://localhost:${port}`);
 });
 
+// 
 app.post('/login', async (req, res) => {
   // Obtener los datos de inicio de sesión del cuerpo de la solicitud.
   const { username, password } = req.body;
@@ -47,7 +48,6 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 });
-
 
 app.post('/register', async (req, res) =>
 {
@@ -78,6 +78,7 @@ app.post('/register', async (req, res) =>
 });
 
 app.post('/community', async (req, res) =>
+<<<<<<< HEAD
   {
     const { name, description, image, creator} = req.body;
     try
@@ -133,6 +134,63 @@ app.post('/community', async (req, res) =>
       res.status(500).json({ error: 'Error interno del servidor' });
     }
   });
+=======
+{
+  const { name, description, image, creator} = req.body;
+  try
+  {
+    const community = await prisma.comunidad.create
+    ({
+      data:
+      {
+        nombre: name,
+        descripcion: description,
+        fotoComunidad: image,
+        FKUsuario: creator
+      }
+    });
+    if(community)
+      res.json({success: 1});
+    else
+      res.status(500).json({success: 0});
+  }
+  catch(error)
+  {
+    console.error('Error al crear comunidad:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+
+app.post('/post', async (req, res) =>
+{
+  const { title, body, image, link, author, community } = req.body;
+
+  try
+  {
+    const post = await prisma.publicacion.create
+    ({
+      data:
+      {
+        titulo: title,
+        texto: body,
+        imagen: image,
+        link: link,
+        FKUsuario: author,
+        FKComunidad: community
+      }
+    });
+    if(post)
+      res.json({success: 1});
+    else
+      res.status(500).json({success: 0});
+  }
+  catch(error)
+  {
+    console.error('Error al crear publicacion:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});
+>>>>>>> d548fae5b41bcce6b8fd5ad383820bd239a3a163
 
 app.post('/joinCommunity', async (req, res) =>
 {
@@ -162,7 +220,7 @@ app.post('/joinCommunity', async (req, res) =>
 // Obtiene la informacion del usuario mediante el id
 app.get('/user/:id', async (req, res) =>
 {
-  const userId = req.params.id;
+  const userId = parseInt(req.params.id);
   try
   {
     const user = await prisma.usuario.findMany({
@@ -182,15 +240,24 @@ app.get('/user/:id', async (req, res) =>
   }
 });
 
+<<<<<<< HEAD
 
 app.get('/post/:id', async (req, res) => {
   const postId = parseInt(req.params.id, 10);
   try {
+=======
+app.get('/post/:id', async(req,res)=>
+{
+  const postId = parseInt(req.params.id);
+  try
+  {
+>>>>>>> d548fae5b41bcce6b8fd5ad383820bd239a3a163
     const post = await prisma.publicacion.findUnique({
       where: {
         id_publicacion: postId
       }
     });
+<<<<<<< HEAD
     if (post) {
       res.json({ success: 1, post_data: post });
     } else {
@@ -198,5 +265,82 @@ app.get('/post/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: 'Error interno del servidor' });
+=======
+    if(post)
+      res.json({success: 1, post_data: post}); 
+    else
+      res.json({success: 0});
+  }
+  catch(error)
+  {
+    res.status(500).json({error: 'Error interno del servidor'});
+  }
+});
+
+app.get('/community/posts/:id', async(req, res) =>
+{
+  const communityId = parseInt(req.params.id);
+  try
+  {
+    const posts = await prisma.publicacion.findMany(
+      {
+        where:
+        {
+          FKComunidad: communityId
+        }
+      }
+    );
+    if(posts)
+      res.json({success: 1, posts_data: posts}); 
+    else
+      res.json({success: 0});
+  }
+  catch(error)
+  {
+    res.status(500).json({error: 'Error interno del servidor'});
+  }
+});
+
+app.get('/user/posts/:id', async(req, res) =>
+{
+  const userId = parseInt(req.params.id);
+  try
+  {
+    const posts = await prisma.publicacion.findMany(
+      {
+        where:
+        {
+          FKUsuario: userId
+        }
+      }
+    );
+    if(posts)
+      res.json({success: 1, posts_data: posts}); 
+    else
+      res.json({success: 0});
+  }
+  catch(error)
+  {
+    res.status(500).json({error: 'Error interno del servidor'});
+  }
+});
+
+app.get('/community/:id', async(req, res) =>
+{
+  const communityId = parseInt(req.params.id);
+  try
+  {
+    const community = await prisma.comunidad.findUnique
+    ({
+      where:
+      {
+        id_comunidad: communityId
+      }
+    })
+    if(community)
+      res.json({success: 1, community_data: community}); 
+    else
+      res.json({success: 0});
+>>>>>>> d548fae5b41bcce6b8fd5ad383820bd239a3a163
   }
 });
