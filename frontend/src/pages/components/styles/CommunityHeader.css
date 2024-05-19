@@ -65,15 +65,22 @@
     }
 }
 
+.CreatorCommInfo{
+
+  /* text-align: end; */
+  padding-bottom: 1rem;
+  font-size: 18px;
+  .CreatorCommName{
+    margin-left: 0.5rem;
+  }
+}
+
 .ModsModalBody{
   h5{
     color: #345c68;
     font-weight: bold;
   }
-  .CreatorCommInfo{
-    padding-bottom: 1rem;
-    font-size: 18px;
-  }
+
   .ModsCommInfo{
     p{
       margin-bottom: 0 !important;

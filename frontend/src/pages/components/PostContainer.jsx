@@ -11,6 +11,7 @@ const PostContainer = () => {
     const [imageURL, setImageURL] = useState(null);
 
     useEffect(() => {
+        console.log('PostContainer montado');
         const fetchPost = async () => {
             try {
                 const response = await fetch(`http://localhost:3000/post/1`, {
@@ -41,7 +42,7 @@ const PostContainer = () => {
                 console.error('Error al llamar a la API:', error);
             }
         };
-
+        console.log('PostContainer desmontado');
         fetchPost();
     }, []);
 
@@ -66,7 +67,7 @@ const PostContainer = () => {
                     </div>
                 </div>
                 <div className='PostTitle'>
-                    <h3>{post.titulo}</h3> 
+                    <h3><a href='/post'>{post.titulo}</a></h3> 
                 </div>
                 <div className='PostContent'>
                     <div className='PostText'>

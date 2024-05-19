@@ -25,6 +25,14 @@
       font-weight: bold;
     }
   }
+  .PostTitle{
+    a{
+      color: black;
+      &:hover{
+        text-decoration: none;
+      }
+    }
+  }
   
   .PostImage{
     margin-bottom: 1rem;
