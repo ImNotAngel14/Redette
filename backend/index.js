@@ -273,4 +273,7 @@ app.get('/community/:id', async(req, res) =>
   {
     res.status(500).json({error: 'Error interno del servidor'});
   }
+  
 });
+
+// Guardar los datos de los temas de la comunidad.
