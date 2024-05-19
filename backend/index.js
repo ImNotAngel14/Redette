@@ -171,7 +171,7 @@ app.get('/user/:id', async (req, res) =>
       }
     });
     if(user)
-      res.json({success: 1, user_data: user[0]}); 
+      res.json({success: 1, user_data: user}); 
     else
       res.json({success: 0});
   }
@@ -188,12 +188,32 @@ app.get('/post/:id', async(req,res)=>
   try
   {
     const post = await prisma.publicacion.findUnique({
-      where: {
+      where:
+      {
         id_publicacion: postId
       }
     });
+    const user = await prisma.usuario.findUnique({
+      where:
+      {
+        id_usuario: post.FKUsuario
+      }
+    });
+    const community = await prisma.comunidad.findUnique({
+      where:
+      {
+        id_comunidad: post.FKComunidad
+      }
+    });
     if(post)
-      res.json({success: 1, post_data: post}); 
+      res.json(
+      {
+        success: 1,
+        username: user.usuario,
+        community: community.nombre,
+        post_data: post,
+        profileImage: user.fotoPerfil,
+      }); 
     else
       res.json({success: 0});
   }
@@ -273,3 +293,5 @@ app.get('/community/:id', async(req, res) =>
     res.status(500).json({error: 'Error interno del servidor'});
   }
 });
+
+// Guardar los datos de los temas de la comunidad.
