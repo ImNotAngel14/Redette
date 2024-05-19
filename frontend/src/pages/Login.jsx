@@ -30,7 +30,6 @@ const Register = () => {
                 },
                 body: JSON.stringify({ username, password })
             });
-
             // Actuamos en base a la respuesta de la API
             const data = await response.json();
             const wrong_auth_msg = document.getElementById('id_wrong_auth_msg');
@@ -38,6 +37,9 @@ const Register = () => {
             {
                 // Ocultamos el mensaje de credenciales inválidas.
                 wrong_auth_msg.setAttribute('hidden', 'true');
+                localStorage.setItem('loggedUser',data.userId);
+                const value = localStorage.getItem('loggedUser');
+                console.log("userId:"+ value);
                 setLoggedIn(true);
             }
             else

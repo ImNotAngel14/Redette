@@ -9,6 +9,8 @@ import PostInputContainer from './components/PostInputContainer';
 import Modal from 'react-bootstrap/Modal';
 
 const Home = () => {
+    // const value = localStorage.getItem('loggedUser');
+    // console.log("userId:"+ value);
     const [showInterestsModal, setShowInterestsModal] = useState(true);
     const [selectedInterestError, setSelectedInterestError] = useState(false);
     const [InterestError, setInterestError] = useState(false);

@@ -16,7 +16,6 @@ import Post from './pages/Post';
 
 
 function App() {
-
   return (
     <Router>
       <Routes>

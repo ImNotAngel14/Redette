@@ -39,7 +39,6 @@ app.post('/login', async (req, res) => {
       res.json({ auth: 0  });
     }
     else{
-      console.log("UserID: " + user[0].id_usuario); // Imprimir el usuario encontrado en la consola
       res.json({auth: 1, userId: user[0].id_usuario}); // Devolver el usuario como respuesta al cliente
     }
     
@@ -283,8 +282,20 @@ app.get('/community/:id', async(req, res) =>
         id_comunidad: communityId
       }
     })
+    const creator = await prisma.usuario.findUnique
+    ({
+      where:
+      {
+        id_usuario: community.FKUsuario
+      }
+    });
     if(community)
-      res.json({success: 1, community_data: community}); 
+      res.json({
+        success: 1, 
+        creatorUsername: creator.usuario,
+        community_data: community,
+        creatorProfileImage: creator.fotoPerfil
+      }); 
     else
       res.json({success: 0});
   }
