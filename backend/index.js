@@ -106,7 +106,7 @@ app.post('/community', async (req, res) =>
 
 app.post('/post', async (req, res) =>
 {
-  const { title, body, image, link, author, community} = req.body;
+  const { title, body, image, link, author, community } = req.body;
 
   try
   {
@@ -162,7 +162,7 @@ app.post('/joinCommunity', async (req, res) =>
 // Obtiene la informacion del usuario mediante el id
 app.get('/user/:id', async (req, res) =>
 {
-  const userId = req.params.id;
+  const userId = parseInt(req.params.id);
   try
   {
     const user = await prisma.usuario.findMany({
@@ -184,7 +184,7 @@ app.get('/user/:id', async (req, res) =>
 
 app.get('/post/:id', async(req,res)=>
 {
-  const postId = req.params.id;
+  const postId = parseInt(req.params.id);
   try
   {
     const post = await prisma.publicacion.findUnique({
@@ -194,7 +194,7 @@ app.get('/post/:id', async(req,res)=>
       }
     });
     if(post)
-      res.json({success: 1, post_data: post[0]}); 
+      res.json({success: 1, post_data: post}); 
     else
       res.json({success: 0});
   }
@@ -206,7 +206,7 @@ app.get('/post/:id', async(req,res)=>
 
 app.get('/community/posts/:id', async(req, res) =>
 {
-  const communityId = req.params.id;
+  const communityId = parseInt(req.params.id);
   try
   {
     const posts = await prisma.publicacion.findMany(
@@ -230,7 +230,7 @@ app.get('/community/posts/:id', async(req, res) =>
 
 app.get('/user/posts/:id', async(req, res) =>
 {
-  const userId = req.params.id;
+  const userId = parseInt(req.params.id);
   try
   {
     const posts = await prisma.publicacion.findMany(
@@ -254,7 +254,7 @@ app.get('/user/posts/:id', async(req, res) =>
 
 app.get('/community/:id', async(req, res) =>
 {
-  const communityId = req.params.id;
+  const communityId = parseInt(req.params.id);
   try
   {
     const community = await prisma.comunidad.findUnique
@@ -265,7 +265,7 @@ app.get('/community/:id', async(req, res) =>
       }
     })
     if(community)
-      res.json({success: 1, community_data: community[0]}); 
+      res.json({success: 1, community_data: community}); 
     else
       res.json({success: 0});
   }
