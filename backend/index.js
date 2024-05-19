@@ -133,23 +133,37 @@ app.post('/post', async (req, res) =>
   }
 });
 
-app.post('/joinCommunity', async (req, res) =>
+app.post('/member', async (req, res) =>
 {
   const { user, community } = req.body;
   try
   {
-    const member = await prisma.miembros.create
+    const user_validation = await prisma.miembros.findFirst
     ({
-      data:
+      where:
       {
-        FKUsuario: user,
-        FKComunidad: community
+        FKUsuario: user
       }
     });
-    if(member)
-      res.json({success: 1});
+    if(user_validation)
+    {
+      res.status(409).json({success: 0, message: "¡Actualmente pertenece a la comunidad seleccionada!."});
+    }
     else
-      res.status(500).json({success: 0});
+    {
+      const member = await prisma.miembros.create
+      ({
+        data:
+        {
+          FKUsuario: user,
+          FKComunidad: community
+        }
+      });
+      if(member)
+        res.json({success: 1});
+      else
+        res.status(500).json({success: 0});
+    }
   }
   catch(error)
   {
@@ -164,7 +178,7 @@ app.get('/user/:id', async (req, res) =>
   const userId = parseInt(req.params.id);
   try
   {
-    const user = await prisma.usuario.findMany({
+    const user = await prisma.usuario.findUnique({
       where: {
         id_usuario: userId
       }
@@ -235,7 +249,7 @@ app.get('/community/posts/:id', async(req, res) =>
         }
       }
     );
-    if(posts)
+    if(posts.length > 1)
       res.json({success: 1, posts_data: posts}); 
     else
       res.json({success: 0});
@@ -259,7 +273,7 @@ app.get('/user/posts/:id', async(req, res) =>
         }
       }
     );
-    if(posts)
+    if(posts.length > 1)
       res.json({success: 1, posts_data: posts}); 
     else
       res.json({success: 0});
@@ -305,4 +319,76 @@ app.get('/community/:id', async(req, res) =>
   }
 });
 
-// Guardar los datos de los temas de la comunidad.
+app.delete('/member', async(req, res) =>
+{
+  const { user, community } = req.body;
+  try
+  {
+    const user_validation = await prisma.miembros.findFirst
+    ({
+      where:
+      {
+        FKUsuario: user,
+        FKComunidad: community
+      }
+    });
+    if(user_validation)
+    {
+      const delete_result = await prisma.miembros.delete
+      ({
+        where:
+        {
+          id_miembro: user_validation.id_miembro
+        }
+      });
+      if(delete_result)
+        res.json({success: 1});
+      else
+        res.status(500).json({success: 0});
+    }
+    else
+    {
+      res.status(409).json({success: 0, message: "¡No puede salir de una comunidad en la que no se encuentra!."});
+    }
+  }
+  catch(error)
+  {
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
+  }
+});
+
+app.get('/community/search/:keyword', async(req, res)=>
+{
+  console.log("search:");
+  const search = req.params.keyword;
+  console.log(search);
+  try
+  {
+    console.log("Buscando comunidades...");
+    const communitys = await prisma.comunidad.findMany
+    ({
+      where:
+      {
+        nombre: {
+          contains: search
+        }
+      }
+    });
+    console.log("Imprimiendo resultados...");
+    if(communitys.length > 1)
+    {
+      console.log("Correcto!");
+      res.json({success: 1, results: communitys}); 
+    }
+    else
+    {
+      console.log("No encontrado!");
+      res.json({success: 0});
+    }
+  }
+  catch(error)
+  {
+    console.log(error);
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
+  }
+});
