@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/PostContainer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import UserImgPost from "./img/userimage.jpeg"
@@ -6,8 +6,48 @@ import PostImg from "./img/userimage.jpeg"
 
 
 const PostContainer = () => {
+
+    const [post, setPost] = useState(null);
+    const [imageURL, setImageURL] = useState(null);
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/post/1`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // Actualiza el estado con los datos obtenidos
+                    setPost(data.post_data);
+                    console.log('Publicación cargada');
+                    console.log('Datos de la publicación:', data.post_data);
+                    // Decodificar base64
+                    const base64Image = btoa(
+                        new Uint8Array(data.post_data.imagen.data)
+                            .reduce((data, byte) => data + String.fromCharCode(byte), '')
+                    );
+                    // Generar URL de la imagen
+                    const imageURL = `data:image/png;base64,${base64Image}`;
+                    setImageURL(imageURL);
+                } else {
+                    console.error('Error al cargar publicación:', data.message);
+                }
+            } catch (error) {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+
+        fetchPost();
+    }, []);
+
     return (
         <div className='PostContainer'>
+            {post && (
             <div className='PostWrapper'>
                 {/* <div className='PostTopic'>
                     <p>Tema del Post</p>
@@ -19,24 +59,25 @@ const PostContainer = () => {
                     </div>
                     <div className='col-11'>
                         <div className='PostCommunityUser'>
-                            <p className='CommunityP'>Comunidad</p> 
+                            <p className='CommunityP'>{post.FKComunidad}</p> 
                             <span>/</span>
-                            <p className='UserP'>Usuario</p>
+                            <p className='UserP'>{post.FKUsuario}</p>
                         </div>                        
                     </div>
                 </div>
                 <div className='PostTitle'>
-                    <h3>Titulo del Post</h3> 
+                    <h3>{post.titulo}</h3> 
                 </div>
                 <div className='PostContent'>
                     <div className='PostText'>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam veritatis consectetur omnis illum placeat repellendus fuga reiciendis perferendis consequuntur a praesentium, voluptate, velit doloremque ab dolorem in vero qui. Aliquam.</p>
+                        <p>{post.texto}</p>
                     </div>
                     <div className='PostImage'>
-                        <img className='PostImg' src={PostImg} alt=''/>
+                        {/* <img className='PostImg' src={PostImg} alt=''/> */}
+                        {imageURL && <img src={imageURL} className='PostImg' alt="Imagen de la publicación" />}
                     </div>
                     <div className='PostLink'>
-                        <span>Link:</span><a href='http://google.com'>google.com</a>
+                        <span>Link:</span><a href={post.link}>{post.link}</a>
                     </div>
                 </div>
                 <hr/>
@@ -51,6 +92,7 @@ const PostContainer = () => {
                     <button className="btn-spacing"> <i className="fa-solid fa-bookmark"></i> Guardar</button>
                 </div>
             </div>
+            )}
         </div>
     );
 };

@@ -78,61 +78,61 @@ app.post('/register', async (req, res) =>
 });
 
 app.post('/community', async (req, res) =>
-{
-  const { selectedName, selectedDesc, comImage, creator} = req.body;
-  try
   {
-    const community = await prisma.comunidad.create
-    ({
-      data:
-      {
-        nombre: selectedName,
-        descripcion: selectedDesc,
-        fotoComunidad: comImage,
-        FKUsuario: creator
-      }
-    });
-    if(community)
-      res.json({success: 1});
-    else
-      res.status(500).json({success: 0});
-  }
-  catch(error)
+    const { name, description, image, creator} = req.body;
+    try
+    {
+      const community = await prisma.comunidad.create
+      ({
+        data:
+        {
+          nombre: name,
+          descripcion: description,
+          fotoComunidad: image,
+          FKUsuario: creator
+        }
+      });
+      if(community)
+        res.json({success: 1});
+      else
+        res.status(500).json({success: 0});
+    }
+    catch(error)
+    {
+      console.error('Error al crear comunidad:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
+  
+  app.post('/post', async (req, res) =>
   {
-    console.error('Error al crear comunidad:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
-
-app.post('/post', async (req, res) =>
-{
-  const { selectedTitle, selectedText, postImage, selectedLink, author, selectedCommunity} = req.body;
-
-  try
-  {
-    const post = await prisma.publicacion.create
-    ({
-      data:
-      {
-        titulo: selectedTitle,
-        texto: selectedText,
-        imagen: postImage,
-        link: selectedLink,
-        FKUsuario: author,
-        FKComunidad: selectedCommunity
-      }
-    });
-    if(post)
-      res.json({success: 1});
-    else
-      res.status(500).json({success: 0});
-  }
-  catch(error)
-  {
-    console.error('Error al crear publicacion:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
-});
+    const { title, body, image, link, author, community} = req.body;
+  
+    try
+    {
+      const post = await prisma.publicacion.create
+      ({
+        data:
+        {
+          titulo: title,
+          texto: body,
+          imagen: image,
+          link: link,
+          FKUsuario: author,
+          FKComunidad: community
+        }
+      });
+      if(post)
+        res.json({success: 1});
+      else
+        res.status(500).json({success: 0});
+    }
+    catch(error)
+    {
+      console.error('Error al crear publicacion:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  });
 
 app.post('/joinCommunity', async (req, res) =>
 {
@@ -183,24 +183,20 @@ app.get('/user/:id', async (req, res) =>
 });
 
 
-app.get('/post/:id', async(req,res)=>
-{
-  const postId = req.params.id;
-  try
-  {
+app.get('/post/:id', async (req, res) => {
+  const postId = parseInt(req.params.id, 10);
+  try {
     const post = await prisma.publicacion.findUnique({
-      where:
-      {
+      where: {
         id_publicacion: postId
       }
     });
-    if(post)
-      res.json({success: 1, post_data: post[0]}); 
-    else
-      res.json({success: 0});
-  }
-  catch(error)
-  {
-    res.status(500).json({error: 'Error interno del servidor'});
+    if (post) {
+      res.json({ success: 1, post_data: post });
+    } else {
+      res.json({ success: 0 });
+    }
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 });

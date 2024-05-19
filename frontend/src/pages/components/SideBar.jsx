@@ -41,10 +41,10 @@ const SideBar = () => {
     // POST
     const [selectedFileName, setSelectedFileName] = useState('');
     const [selectedFileBase64, setSelectedFileBase64] = useState('');
-    const [selectedTitle, setSelectedTitle] = useState('');
-    const [selectedText, setSelectedText] = useState('');
-    const [selectedLink, setSelectedLink] = useState('');
-    const [selectedCommunity, setSelectedCommunity] = useState('');
+    const [title, setSelectedTitle] = useState('');
+    const [body, setSelectedText] = useState('');
+    const [link, setSelectedLink] = useState('');
+    const [community, setSelectedCommunity] = useState('');
     const [titleError, setTitleError] = useState(false);
     const [communityError, setCommunityError] = useState(false);
 
@@ -52,8 +52,8 @@ const SideBar = () => {
     // POST
 
     // COMUNIDAD {
-    const [selectedName, setSelectedName] = useState('');
-    const [selectedDesc, setSelectedDesc] = useState('');
+    const [name, setSelectedName] = useState('');
+    const [description, setSelectedDesc] = useState('');
     const [nameError, setNameError] = useState(false);
     const [descError, setDescError] = useState(false);
 
@@ -67,33 +67,36 @@ const SideBar = () => {
     const handleSubmitPost = async (event) => {
         event.preventDefault();
 
-        if (!selectedTitle) {
+        if (!title) {
             setTitleError(true);
         } else {
             setTitleError(false);
         }
 
-        if (!selectedCommunity) {
+        if (!community) {
             setCommunityError(true);
         } else {
             setCommunityError(false);
         }
 
         // Si todos los campos obligatorios están completos, puedes enviar el formulario
-        if (selectedTitle && selectedCommunity) {
-            let postImage = selectedFileBase64.substring(22);
+        if (title && community) {
+            let image = selectedFileBase64.substring(22);
+            //usuario harcodeado
+            let author = 1;
+
 
             // Aquí puedes agregar la lógica para enviar el formulario
             // Obtener los valores de los campos del formulario
             const formData = {
-                selectedCommunity,
-                selectedTitle,
-                selectedText,
-                selectedLink,
-                postImage
+                author,
+                community,
+                title,
+                body,
+                link,
+                image
             };
-            console.log("Datos del formulario de nueva comunidad:", formData);
-            // peticion backend
+            console.log("Datos del formulario de nueva publicacion:", formData);
             // peticion backend
             try {
                 const response = await fetch('http://localhost:3000/post', {
@@ -102,11 +105,12 @@ const SideBar = () => {
                     'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({                         
-                        selectedCommunity,
-                        selectedTitle,
-                        selectedText,
-                        selectedLink,
-                        postImage
+                        community,
+                        title,
+                        body,
+                        link,
+                        image,
+                        author
                     })
                 });
 
@@ -132,13 +136,13 @@ const SideBar = () => {
     const handleSubmitCommunity = async (event) => {
         event.preventDefault();
 
-        if (!selectedName.trim()) {
+        if (!name.trim()) {
             setNameError(true);
         } else {
             setNameError(false);
         }
         
-        if (!selectedDesc.trim()) {
+        if (!description.trim()) {
             setDescError(true);
         } else {
             setDescError(false);
@@ -158,16 +162,16 @@ const SideBar = () => {
 
 
         // Si todos los campos obligatorios están completos, puedes enviar el formulario
-        if (selectedName && selectedDesc && commImageBase64 && (tags.length > 0)) {
+        if (name && description && commImageBase64 && (tags.length > 0)) {
         // Imprimir los valores en la consola
-        let comImage = commImageBase64.substring(22);
+        let image = commImageBase64.substring(22);
         var creator = 1;
 
             // Obtener los valores de los campos del formulario
             const formData = {
-                selectedName,
-                selectedDesc,
-                comImage,
+                name,
+                description,
+                image,
                 // tags
                 creator
             };
@@ -179,7 +183,7 @@ const SideBar = () => {
                     headers: {
                     'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ selectedName, selectedDesc, comImage, creator})
+                    body: JSON.stringify({ name, description, image, creator})
                 });
 
                 // Actuamos en base a la respuesta de la API
@@ -298,16 +302,16 @@ const SideBar = () => {
                 <div className="form-group">
                 {PostRegError && <p className="error-text" style={{ color: 'red' }}>Creación de Post fallido. Intente de nuevo</p>}
                 <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
-                <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={selectedCommunity} onChange={(e) => setSelectedCommunity(e.target.value)}>
+                <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={community} onChange={(e) => setSelectedCommunity(parseInt(e.target.value))}>
                     <option disabled value="">Selecciona una comunidad</option>
-                    <option value="Comunidad 1">Comunidad 1</option>
-                    <option value="Comunidad 2">Comunidad 2</option>
-                    <option value="Comunidad 3">Comunidad 3</option>
+                    <option value={ 1 }>Comunidad 1</option>
+                    <option value={ 2 }>Comunidad 2</option>
+                    <option value={ 3 }>Comunidad 3</option>
                 </select>
                 {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-                <textarea className={`form-control ${titleError ? 'error' : ''}`} value={selectedTitle} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
+                <textarea className={`form-control ${titleError ? 'error' : ''}`} value={title} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
                 {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-                <textarea className="form-control" rows="3" placeholder='Texto' value={selectedText} onChange={(e) => setSelectedText(e.target.value)}></textarea>
+                <textarea className="form-control" rows="3" placeholder='Texto' value={body} onChange={(e) => setSelectedText(e.target.value)}></textarea>
                 <div className='AddtoPostContainer'>
                     <div className='FileInputContainer'>
                         <input
@@ -325,7 +329,7 @@ const SideBar = () => {
                     </div>
                     <div className='UrlInputContainer'>
                         <label htmlFor='post_url'><i className="fa-solid fa-link"></i></label>
-                        <input type='url' className='input_url' id='post_url' value={selectedLink} onChange={(e) => setSelectedLink(e.target.value)} placeholder='Adjuntar link' />
+                        <input type='url' className='input_url' id='post_url' value={link} onChange={(e) => setSelectedLink(e.target.value)} placeholder='Adjuntar link' />
                     </div>
                 </div>
                 </div>
@@ -344,9 +348,9 @@ const SideBar = () => {
                     <Modal.Body>
                     <div className="form-group">
                         {CommRegError && <p className="error-text" style={{ color: 'red' }}>Registro de Comunidad fallido. Intente de nuevo</p>}
-                        <textarea className={`form-control ${nameError ? 'error' : ''}`} value={selectedName} onChange={(e) => setSelectedName(e.target.value)} rows="1" placeholder='Nombre'></textarea>
+                        <textarea className={`form-control ${nameError ? 'error' : ''}`} value={name} onChange={(e) => setSelectedName(e.target.value)} rows="1" placeholder='Nombre'></textarea>
                         {nameError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-                        <textarea className={`form-control ${descError ? 'error' : ''}`} value={selectedDesc} onChange={(e) => setSelectedDesc(e.target.value)} rows="5" placeholder='Descripción'></textarea>
+                        <textarea className={`form-control ${descError ? 'error' : ''}`} value={description} onChange={(e) => setSelectedDesc(e.target.value)} rows="5" placeholder='Descripción'></textarea>
                         {descError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
                         <div className="form-group">
                             <label className="form-label">Imagen de la Comunidad:</label>
