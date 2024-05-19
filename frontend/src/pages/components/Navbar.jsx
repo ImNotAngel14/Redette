@@ -15,7 +15,7 @@ const NavBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
         <div className="d-flex justify-content-center w-100">
             <form className="d-flex">
-                <input className="form-control me-2" type="search" placeholder="Buscar" aria-label="Search"/>
+                <input className="form-control me-2" type="search" placeholder="Buscar Comunidades" aria-label="Search"/>
                 <button className="btn" type="submit"><i className="fa-solid fa-magnifying-glass fa-xl"></i></button>
             </form>
         </div>

@@ -7,13 +7,9 @@ const SideBarProfile= () => {
     <div>
         <div className='SideBarContainer'>
             <div className='SideBarWrapper'>
-                <h4>Descripción del perfil:</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ac tempus augue, sed vulputate diam. Donec tempus iaculis lacus a vulputate.</p>
-                <div className='DateUserContainer'>
-                <strong>Se unió en:</strong> <span>01/01/2001</span>
-                </div>
+              <button>Cerrar sesión</button>
                 <hr/>
-                <button>Cerrar sesión</button>
+              <button>Eliminar cuenta</button>
             </div>
         </div>
     </div>

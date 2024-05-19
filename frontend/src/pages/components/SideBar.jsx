@@ -397,6 +397,10 @@ const SideBar = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Comunidad creada exitosamente</Modal.Title>
                 </Modal.Header>
+                <Modal.Body>
+                <button className="buttonPostAccept"> <a href='/comm'> Ver Comunidad</a> </button>
+                </Modal.Body>
+
             </Modal>
 
             <Modal show={showPostSuccess} onHide={handleClosePostSuccess}>

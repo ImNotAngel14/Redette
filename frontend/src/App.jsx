@@ -13,6 +13,7 @@ import Post from './pages/Post';
  import ProfileCom from './pages/ProfileCom'
  import ProfilePosts from './pages/ProfilePosts'
  import ProfileSaved from './pages/ProfileSaved'
+ import SearchCommunity from './pages/SearchCommunity'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         {<Route path="/pfcomm" element={ <ProfileCom/> } />}
         {<Route path="/pfposts" element={ <ProfilePosts/> } />}
         {<Route path="/pfsaved" element={ <ProfileSaved/> } />}
+        {<Route path="/search" element={ <SearchCommunity/> } />}
 
 
       </Routes>
