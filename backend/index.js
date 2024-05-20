@@ -568,8 +568,16 @@ app.get('/member/:id', async(req, res)=>
       where:
       {
         FKUsuario: id_member
-      }
+      },
+      include: {
+        comunidad: true,
+        usuario: true,
+      },
     });
+    if(communitys.length > 0)
+      res.json({success: 1, userCommunityList: communitys});
+    else
+      res.json({success: 0});
   }
   catch(error)
   {
