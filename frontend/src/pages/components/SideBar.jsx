@@ -38,6 +38,11 @@ const SideBar = () => {
         setCommImageError(false);
     };
 
+    const handleLogOff = () => {
+        localStorage.removeItem('loggedUser');
+        window.location.replace("/login");
+    }
+
     // POST
     const [selectedFileName, setSelectedFileName] = useState('');
     const [selectedFileBase64, setSelectedFileBase64] = useState('');
@@ -289,7 +294,7 @@ const SideBar = () => {
                         <a href='/pfcomm'><i className="fa-solid fa-people-roof"></i> Tus comunidades</a>
                         <a href='/pfsaved'><i className="fa-regular fa-bookmark"></i> Guardados</a>
                         <hr />
-                        <button>Cerrar sesión</button>
+                        <button onClick={handleLogOff}>Cerrar sesión</button>
                     </div>
                 </div>
             </div>

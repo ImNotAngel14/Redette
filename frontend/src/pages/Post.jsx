@@ -14,9 +14,11 @@ const Post = () => {
 
     const { id } = useParams();  // Obtener el ID del post desde la URL
     const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([]);
     const [imageURL, setImageURL] = useState(null);
     const [imageURL2, setImageURL2] = useState(null);
-
+    const [like, setLike] = useState(null);
+    const [pid, setPid] = useState(null);
 
     useEffect(() => {
         console.log('PostContainer montado');
@@ -32,6 +34,8 @@ const Post = () => {
                 const data = await response.json();
                 if (data.success) {
                     setPost(data.post_data);  // Ajuste para acceder correctamente a los datos del post
+                    
+                    setPid(data.post_data.id_publicacion);
                     console.log('Publicación cargada');
                     console.log('Datos de la publicación:', data);
 
@@ -56,6 +60,56 @@ const Post = () => {
             }
         };
         fetchPost();
+        const fetchComment = async () =>{
+            try
+            {
+                const response = await fetch(`http://localhost:3000/comment/${id}`, {  // Usar el ID del post en la URL
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                });
+                const data = await response.json();
+                if (data.success)
+                {
+                    setComments(data.comentarios);
+                    console.log("Comentarios cargados con exito.");
+                }
+            }
+            catch(error)
+            {
+                console.error('Error al llamar a la API:', error);
+            }
+        };
+        fetchComment();
+        const fetchLike = async () =>{
+            const user = parseInt(localStorage.getItem("loggedUser"));
+            try
+            {
+                const response = await fetch(`http://localhost:3000/like`, {  // Usar el ID del post en la URL
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({                         
+                    user,
+                    post: pid
+                })
+                });
+                const data = await response.json();
+                if (data.like)
+                {
+                    // Settear like como 1
+                    setLike(data.like);
+                    console.log("Like cargado con exito.");
+                }
+            }
+            catch(error)
+            {
+                console.error('Error al llamar a la API:', error);
+            }
+        }
+        fetchLike();
     }, [id]);  // Agregar id como dependencia para que se ejecute el useEffect cuando cambie
 
 
@@ -69,7 +123,7 @@ const Post = () => {
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
                         {post && (
-                                <PostContainer post={post} imageURL={imageURL} imageURL2={imageURL2} />
+                                <PostContainer post={post} imageURL={imageURL} imageURL2={imageURL2} like={like} />
                         )}
                         </div>
                         <div className='row'>
@@ -79,12 +133,22 @@ const Post = () => {
                             </div>
                         </div>
                         <div className='row'>
-                        <CommentInputContainer>
-                        </CommentInputContainer>
+                        <CommentInputContainer
+                            id_post={pid}
+                        />
                         </div>
                         <div className='row'>
-                        <CommentContainer>
-                        </CommentContainer>
+                        {comments.map((comment) => (
+                            <CommentContainer
+                                texto={comment.texto}
+                                fecha={comment.fecha}
+                                usuario={comment.usuario.usuario}
+                                fotoPerfil={btoa(
+                                        new Uint8Array(comment.usuario.fotoPerfil.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                                    )
+                                }
+                            />
+                        ))}
                         </div>
                     </div>
                     <div className="col-lg-1  d-lg-block d-none" >

@@ -2,7 +2,37 @@ import React from 'react';
 import './styles/PostContainer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const PostContainer = ({ post, imageURL, imageURL2 }) => {
+const PostContainer = ({ post, imageURL, imageURL2, like }) => {
+    const handleLike = async (event) => {
+        const user = parseInt(localStorage.getItem("loggedUser"));
+        try
+        {
+            const response = await fetch('http://localhost:3000/like', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({                         
+                    user,
+                    post: post.id_publicacion
+                })
+            });
+            const data = await response.json();
+            if(data.success)
+            {
+                console.log("Like status: "+ data.like );
+                // Marcar el like correctamente
+                // Estado del like es data.like
+                // data.like regresa 1 si ya dio like
+                // data.like regresa 0 si quito el like
+            }
+        }
+        catch(error)
+        {
+            console.error('Error al llamar a la API:', error);
+        }
+    }
+
     return (
         <div className='PostContainer'>
             <div className='PostWrapper'>
@@ -35,7 +65,7 @@ const PostContainer = ({ post, imageURL, imageURL2 }) => {
                 <hr />
                 <div className='Buttons'>
                     <div className="btn-group btn-spacing" role="group" aria-label="Basic example">
-                        <button type="button" className="btn"><i className="fa-solid fa-angles-up"></i></button>
+                        <button onClick={handleLike} type="button" className="btn"><i className="fa-solid fa-angles-up"></i></button>
                         <button type="button" className="btn" disabled>#</button>
                         <button type="button" className="btn"><i className="fa-solid fa-angles-down"></i></button>
                     </div>

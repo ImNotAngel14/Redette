@@ -256,20 +256,11 @@ app.get('/post/:id', async(req,res)=>
       where:
       {
         id_publicacion: postId
-      }
-    });
-    // Obtenemos los datos del usuario que hizo la publicacion.
-    const user = await prisma.usuario.findUnique({
-      where:
+      },
+      include:
       {
-        id_usuario: post.FKUsuario
-      }
-    });
-    // Obtenemos los datos de la comunidad en la que se hizo la publicacion.
-    const community = await prisma.comunidad.findUnique({
-      where:
-      {
-        id_comunidad: post.FKComunidad
+        usuario: true,
+        comunidad: true
       }
     });
     if(post)
@@ -277,10 +268,7 @@ app.get('/post/:id', async(req,res)=>
       res.json(
       {
         success: 1,
-        username: user.usuario,
-        community: community.nombre,
-        post_data: post,
-        profileImage: user.fotoPerfil,
+        post_data: post
       }); 
     else
       res.json({success: 0});
@@ -568,8 +556,16 @@ app.get('/member/:id', async(req, res)=>
       where:
       {
         FKUsuario: id_member
-      }
+      },
+      include: {
+        comunidad: true,
+        usuario: true,
+      },
     });
+    if(communitys.length > 0)
+      res.json({success: 1, userCommunityList: communitys});
+    else
+      res.json({success: 0});
   }
   catch(error)
   {
@@ -677,6 +673,31 @@ app.post('/comment', async (req, res)=>
         res.json({success: 1, comentarios: comments});
       else
         res.json({success: 0});
+    }
+    catch(error)
+    {
+      console.log(error);
+      res.status(500).json({error: 'Error interno del servidor', detalles: error});
+    }
+  });
+
+  app.get('/like', async(req,res)=>
+  {
+    const { user, post } = req.body;
+    try
+    {
+      const like_validation = await prisma.likes.findFirst
+      ({
+        where:
+        {
+          FKUsuario: user,
+          FKPublicacion: post
+        }
+      });
+      if(like_validation)
+        res.json({like: 1});
+      else
+        res.json({like: 0});
     }
     catch(error)
     {

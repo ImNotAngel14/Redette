@@ -12,6 +12,8 @@ const Home = () => {
 
     useEffect(() => {
         var value = localStorage.getItem('loggedUser');
+        if(!value)
+            window.location.replace("/login");
         console.log('Usuario ID: '+ value);
         console.log('Home montado');
 

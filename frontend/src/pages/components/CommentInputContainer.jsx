@@ -3,9 +3,9 @@ import './styles/CommentInputContainer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Toast from 'react-bootstrap/Toast';
 
-const CommentInputContainer= () => {
+const CommentInputContainer= ( {id_post}) => {
     
-    const [textcomment, setTextComment] = useState('');
+    const [text, setTextComment] = useState('');
     const [textcommentError, setTextCommentError] = useState('');
     const [CommentError, setCommentError] = useState('');
 
@@ -16,21 +16,24 @@ const CommentInputContainer= () => {
     const handleSubmitComment = async (event) => {
         event.preventDefault();
 
-        if (!textcomment) {
+        if (!text) {
             setTextCommentError(true);
         } else {
             setTextCommentError(false);
         }
 
-        if (textcomment) {
+        if (text) {
             try {
+                const user = parseInt(localStorage.getItem("loggedUser"));
                 const response = await fetch('http://localhost:3000/comment', {
                     method: 'POST',
                     headers: {
                     'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({                         
-                        textcomment
+                        text,
+                        user,
+                        post: id_post
                     })
                 });
 
@@ -39,6 +42,7 @@ const CommentInputContainer= () => {
                 if (data.success) {
                     setShowToast(true);
                     setCommentError(false); // Resetear el error
+                    window.location.reload();
                 } else {
                     setCommentError(true);
                     setShowToast(false);
@@ -67,7 +71,7 @@ const CommentInputContainer= () => {
                         <div>
                             <i className="fa-regular fa-pen-to-square fa-xl"></i>
                         </div>
-                        <textarea className={`form-control ${textcommentError ? 'error' : ''}`} value={textcomment} onChange={(e) => setTextComment(e.target.value)} rows="1" placeholder='Escribe un comentario...'></textarea>
+                        <textarea className={`form-control ${textcommentError ? 'error' : ''}`} value={text} onChange={(e) => setTextComment(e.target.value)} rows="1" placeholder='Escribe un comentario...'></textarea>
                     </div>
                     {textcommentError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
                     <hr/>
