@@ -9,6 +9,12 @@
       border-radius: 0.75rem;
     }
     .navbarBrand{
+      a{
+        color:white;
+        &:hover{
+          text-decoration: none;
+        }
+      }
       color:white;
       text-shadow: 2px 2px 1px #2d57618e;
       padding-top: var(--bs-navbar-brand-padding-y);

@@ -23,25 +23,16 @@ function App() {
         <Route exact path="/login" element={ <Login/> } />
         <Route path="/register" element={ <Register/> } />
         {<Route path="/home" element={ <Home/> } />}
-        {<Route path="/post" element={ <Post/> } />}
-        {<Route path="/comm" element={ <Community/> } />}
+        <Route path="/post/:id" element={<Post />} />  {/* Ruta actualizada */}
+        {<Route path="/comm:id" element={ <Community/> } />}
         {<Route path="/pfcomm" element={ <ProfileCom/> } />}
         {<Route path="/pfposts" element={ <ProfilePosts/> } />}
         {<Route path="/pfsaved" element={ <ProfileSaved/> } />}
-        {<Route path="/search" element={ <SearchCommunity/> } />}
+        <Route path="/search/:query" element={<SearchCommunity />} /> {/* Ruta dinámica */}
 
 
       </Routes>
     </Router>
-    // <Community/>
-
-    // <Post/>
-
-    // <ProfileCom/>
-    
-    // <ProfilePosts/>   
-
-    // <ProfileSaved/>  
   );
 }
 

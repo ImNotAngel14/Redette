@@ -1,134 +1,105 @@
-import { useState } from 'react';
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Home.css'
-import NavBar from './components/Navbar'
-import SideBar from './components/SideBar'
+import './styles/Home.css';
+import NavBar from './components/Navbar';
+import SideBar from './components/SideBar';
 import PostContainer from './components/PostContainer';
 import PostInputContainer from './components/PostInputContainer';
-import Modal from 'react-bootstrap/Modal';
 
 const Home = () => {
-    // const value = localStorage.getItem('loggedUser');
-    // console.log("userId:"+ value);
-    const [showInterestsModal, setShowInterestsModal] = useState(true);
-    const [selectedInterestError, setSelectedInterestError] = useState(false);
-    const [InterestError, setInterestError] = useState(false);
-    const handleCloseInterestsModal = () => setShowInterestsModal(false);
+    const [posts, setPosts] = useState([]);
+    const [images, setImages] = useState({});
 
-    const initialOptions = ['Videojuegos', 'Deportes', 'Series', 'Películas'];
-    const [checkboxes, setCheckboxes] = useState(
-      initialOptions.reduce((acc, option) => ({ ...acc, [option]: false }), {})
-    );
-  
-    const handleCheckboxChange = (option) => {
-      setCheckboxes(prevCheckboxes => ({
-        ...prevCheckboxes,
-        [option]: !prevCheckboxes[option],
-      }));
-    };  
+    useEffect(() => {
+        var value = localStorage.getItem('loggedUser');
+        console.log('Usuario ID: '+ value);
+        console.log('Home montado');
 
-    const handleInterestsFormSubmit = async (event) => {
-        event.preventDefault();
-        const selectedInterests = Object.keys(checkboxes).filter(option => checkboxes[option]);
-        const anyInterestSelected = selectedInterests.length > 0;            
-        // peticion backend
-
-        if (anyInterestSelected) {
-            handleCloseInterestsModal();
-            setSelectedInterestError(false);
-
+        const fetchPosts = async (userId) => {
             try {
-                const response = await fetch('http://localhost:3000/interests', {
-                    method: 'POST',
+                const response = await fetch(`http://localhost:3000/home/${userId}`, {
+                    method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ interests: selectedInterests }),
+                        'Content-Type': 'application/json'
+                    }
                 });
 
                 const data = await response.json();
-                if (data.success) {
-                    handleCloseInterestsModal();
-                    setInterestError(false);
+                if (data.Resultados && data.Resultados.length > 0) {
+                    console.log('Datos de la publicación:', data);
+                    console.log('Datos de la publicación:', data.Resultados[0].imagen.data);
+
+                    setPosts(data.Resultados);
+
+                    const imagePromises = data.Resultados.map(async (post) => {
+                        const base64Image = btoa(
+                            new Uint8Array(post.imagen.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                        );
+                        const imageURL = `data:image/png;base64,${base64Image}`;
+
+                        const base64Image2 = btoa(
+                            new Uint8Array(post.usuario.fotoPerfil.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                        );
+                        const imageURL2 = `data:image/png;base64,${base64Image2}`;
+
+                        return { id: post.id_publicacion, imageURL, imageURL2 };
+                    });
+
+                    const imagesData = await Promise.all(imagePromises);
+                    const imagesMap = imagesData.reduce((acc, imageData) => {
+                        acc[imageData.id] = { imageURL: imageData.imageURL, imageURL2: imageData.imageURL2 };
+                        return acc;
+                    }, {});
+                    setImages(imagesMap);
                 } else {
-                    console.error('Error en el registro de intereses:', data.message);
-                    setInterestError(true);
+                    console.error('Error al cargar publicaciones:', data.message);
+                    console.log('Datos de la publicación:', data);
                 }
             } catch (error) {
                 console.error('Error al llamar a la API:', error);
-                setInterestError(true);
             }
+        };
+        const userId = localStorage.getItem('loggedUser');
+        console.log('Usuario ID:', userId);
+        console.log('Community montado');
+
+        if (userId) {
+            fetchPosts(userId);
+            console.log('Home del Usuario con ID '+userId);
         } else {
-            setSelectedInterestError(true);
-        }   
-        // peticion backend
-    };
+            console.error('No hay usuario ID en localStorage');
+        }
+        // fetchPosts();
+    }, []);
 
     return (
         <div className='h_body'>
-            <NavBar>
-            </NavBar>
-
+            <NavBar />
             <div className='container-fluid ContentPage'>
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
-                        <PostInputContainer>
-                        </PostInputContainer>
+                            <PostInputContainer />
                         </div>
                         <div className='row'>
-                        <PostContainer>
-                        </PostContainer>
+                            {posts.map((post) => (
+                                <PostContainer
+                                    key={post.id_publicacion}
+                                    post={post}
+                                    imageURL={images[post.id_publicacion]?.imageURL}
+                                    imageURL2={images[post.id_publicacion]?.imageURL2}
+                                />
+                            ))}
                         </div>
                     </div>
-                    <div className="col-lg-1  d-lg-block d-none" >
-                    {/* Espacio entre las columnas visible solo en pantallas LG o más grandes */}
-                    </div>
+                    <div className="col-lg-1 d-lg-block d-none" />
                     <div className='col-lg-3 col-md-4 order-last'>
-
-                    <SideBar>
-                    </SideBar>
-
+                        <SideBar />
                     </div>
                 </div>
             </div>
-
-            <Modal show={showInterestsModal} onHide={handleCloseInterestsModal} backdrop="static">
-                <form onSubmit={handleInterestsFormSubmit}>
-                    <Modal.Header>
-                        <Modal.Title>Selecciona tus intereses</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        {InterestError && <p style={{ color: 'red' }}>Error al cargar los intereses</p>}
-                        <div className='InterestsList'>
-                            {initialOptions.map((option, index) => (
-                                <div key={index}>
-                                    <input
-                                        type="checkbox"
-                                        id={`interest${index}`}
-                                        checked={checkboxes[option]}
-                                        onChange={() => handleCheckboxChange(option)}
-                                    />
-                                    <label htmlFor={`interest${index}`}>
-                                        {option}
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-                        {selectedInterestError && <p style={{ color: 'red' }}>Por favor, selecciona al menos un interés</p>}
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <input type="submit" className='buttonInterestAccept' value='Aceptar'/>
-                    </Modal.Footer>
-                </form>
-            </Modal>
-
         </div>
-
-    )
-
-
-}
+    );
+};
 
 export default Home;
