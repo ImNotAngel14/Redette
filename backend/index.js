@@ -577,3 +577,110 @@ app.get('/member/:id', async(req, res)=>
     res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
+
+//Guarda el like del usuario
+app.post('/like', async (req, res)=>
+{
+  const { user, post } = req.body;
+  try
+  {
+    const like_validation = await prisma.likes.findFirst
+    ({
+      where:
+      {
+        FKUsuario: user,
+        FKPublicacion: post
+      }
+    });
+    if(like_validation)
+    {
+      const like = await prisma.likes.delete
+      ({
+        where:
+        {
+          id_like: like_validation.id_like
+        }
+      });
+      if(like)
+        res.json({success: 1, like: 0});
+      else
+        res.status(500).json({success: 0, message: "Ocurrio un error al efectuar esta accion."});
+    }
+    else
+    {
+      const like = await prisma.likes.create
+      ({
+        data:
+        {
+          FKUsuario: user,
+          FKPublicacion: post
+        }
+      });
+      if(like)
+        res.json({success: 1, like: 1});
+      else
+        res.status(500).json({success: 0, message: "Ocurrio un error al efectuar esta accion."});
+    }
+  }
+  catch(error)
+  {
+    console.log(error);
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
+  }
+});
+
+app.post('/comment', async (req, res)=>
+  {
+    const { text, user, post } = req.body;
+    try
+    {
+      const comment = await prisma.comentarios.create
+      ({
+        data:
+        {
+          texto: text,
+          FKUsuario: user,
+          FKPublicacion: post
+        }
+      });
+      if(comment)
+        res.json({success: 1});
+      else
+        res.json({success: 0});
+    }
+    catch(error)
+    {
+      console.log(error);
+      res.status(500).json({error: 'Error interno del servidor', detalles: error});
+    }
+  });
+
+  // Obtener comentarios publicacion
+  app.get('/comment/:id', async (req, res)=>
+  {
+    // Obtenemos del URL el ID de la publicacion.
+    const post_id = parseInt(req.params.id);
+    try
+    {
+      const comments = await prisma.comentarios.findMany
+      ({
+        where:
+        {
+          FKPublicacion: post_id
+        },
+        include:
+        {
+          usuario: true
+        }
+      });
+      if(comments.length > 0)
+        res.json({success: 1, comentarios: comments});
+      else
+        res.json({success: 0});
+    }
+    catch(error)
+    {
+      console.log(error);
+      res.status(500).json({error: 'Error interno del servidor', detalles: error});
+    }
+  });
