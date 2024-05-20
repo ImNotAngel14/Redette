@@ -100,9 +100,16 @@ const ProfilePosts = () => {
                 <ProfileHeader username={username} profileImage={profileImage} />
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
+                        {
+                        /*
+                        
                         <div className='row'>
                             <PostInputContainer />
                         </div>
+                        
+                        */
+                        }
+                        
                         <div className='row'>
                             {loading ? (
                                 <p>Cargando publicaciones...</p>

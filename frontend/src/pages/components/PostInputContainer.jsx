@@ -50,22 +50,32 @@ const PostInputContainer = () => {
       }
 
       // Si todos los campos obligatorios están completos, puedes enviar el formulario
-      if (selectedTitle && selectedCommunity) {
+      if (selectedTitle) {
           // Aquí puedes agregar la lógica para enviar el formulario
 
           // peticion backend
           try {
+            // Obtiene la URL actual
+              const currentUrl = window.location.pathname;
+
+              // Divide la URL en segmentos
+              const urlSegments = currentUrl.split('/');
+
+              // Supone que el ID del post es el último segmento
+              const communityId = urlSegments[urlSegments.length - 1];
+              const userId = localStorage.getItem('loggedUser');
               const response = await fetch('http://localhost:3000/post', {
                   method: 'POST',
                   headers: {
                   'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({                         
-                      selectedCommunity,
-                      selectedTitle,
-                      selectedText,
-                      selectedLink,
-                      selectedFileBase64
+                      community: parseInt(communityId),
+                      title: selectedTitle,
+                      body: selectedText,
+                      link: selectedLink,
+                      image: selectedFileBase64.substring(22),
+                      author: parseInt(userId)
                   })
               });
 
@@ -129,6 +139,8 @@ const PostInputContainer = () => {
         <Modal.Body>
             <div className="form-group">
             {PostRegError && <p className="error-text" style={{ color: 'red' }}>Creación de Post fallido. Intente de nuevo</p>}
+            {
+            /*
             <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
             <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={selectedCommunity} onChange={(e) => setSelectedCommunity(e.target.value)}>
                 <option disabled value="">Selecciona una comunidad</option>
@@ -136,7 +148,10 @@ const PostInputContainer = () => {
                 <option value="Comunidad 2">Comunidad 2</option>
                 <option value="Comunidad 3">Comunidad 3</option>
             </select>
+            
             {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
+            */
+            }
             <textarea className={`form-control ${titleError ? 'error' : ''}`} value={selectedTitle} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
             {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
             <textarea className="form-control" rows="3" placeholder='Texto' value={selectedText} onChange={(e) => setSelectedText(e.target.value)}></textarea>

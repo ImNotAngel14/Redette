@@ -31,8 +31,8 @@ const CommentInputContainer= ( {id_post}) => {
                     'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({                         
-                        text,
-                        user,
+                        text: text,
+                        user: user,
                         post: id_post
                     })
                 });

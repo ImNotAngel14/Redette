@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './styles/PostContainer.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const PostContainer = ({ post, imageURL, imageURL2, like }) => {
+const PostContainer = ({ post, imageURL, imageURL2, like}) => {
+    const [likeCount, setLikeCount] = useState(post.likeCount);
     const handleLike = async (event) => {
         const user = parseInt(localStorage.getItem("loggedUser"));
         try
@@ -13,18 +14,17 @@ const PostContainer = ({ post, imageURL, imageURL2, like }) => {
                 'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({                         
-                    user,
-                    post: post.id_publicacion
+                    user_id: user,
+                    post_id: post.id_publicacion
                 })
             });
             const data = await response.json();
             if(data.success)
             {
-                console.log("Like status: "+ data.like );
-                // Marcar el like correctamente
-                // Estado del like es data.like
-                // data.like regresa 1 si ya dio like
-                // data.like regresa 0 si quito el like
+                if(data.like)
+                    setLikeCount(likeCount + 1);
+                else
+                    setLikeCount(likeCount - 1);
             }
         }
         catch(error)
@@ -66,7 +66,7 @@ const PostContainer = ({ post, imageURL, imageURL2, like }) => {
                 <div className='Buttons'>
                     <div className="btn-group btn-spacing" role="group" aria-label="Basic example">
                         <button onClick={handleLike} type="button" className="btn"><i className="fa-solid fa-angles-up"></i></button>
-                        <button type="button" className="btn" disabled>#</button>
+                        <button type="button" className="btn" disabled id="btn_likeCount">{likeCount}</button>
                         <button type="button" className="btn"><i className="fa-solid fa-angles-down"></i></button>
                     </div>
                     <button className="btn-spacing"><a href={`/post/${post.id_publicacion}`}><i className="fa-solid fa-comments"></i> Comentarios</a></button>

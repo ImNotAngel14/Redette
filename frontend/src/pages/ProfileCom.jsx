@@ -46,7 +46,8 @@ const ProfileCom = () => {
     useEffect(() => {
         const fetchUserCommunities = async () => {
             try {
-                const response = await fetch('http://localhost:3000/member/1', {
+                var value = localStorage.getItem('loggedUser');
+                const response = await fetch(`http://localhost:3000/member/${value}`, {
                     method: 'GET', // Aquí deberías pasar el ID del usuario
                     headers: {
                         'Content-Type': 'application/json'

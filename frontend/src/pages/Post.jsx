@@ -18,8 +18,7 @@ const Post = () => {
     const [imageURL, setImageURL] = useState(null);
     const [imageURL2, setImageURL2] = useState(null);
     const [like, setLike] = useState(null);
-    const [pid, setPid] = useState(null);
-
+    const [likeCount, setLikeCount] = useState(null);
     useEffect(() => {
         console.log('PostContainer montado');
         const fetchPost = async () => {
@@ -34,11 +33,9 @@ const Post = () => {
                 const data = await response.json();
                 if (data.success) {
                     setPost(data.post_data);  // Ajuste para acceder correctamente a los datos del post
-                    
-                    setPid(data.post_data.id_publicacion);
-                    console.log('Publicación cargada');
-                    console.log('Datos de la publicación:', data);
-
+                    setLikeCount(data.likeCount);
+                    console.log(data.post_data.id_publicacion);
+                    console.log("//////////////Data:"+data.post_data);
                     const base64Image = btoa(
                         new Uint8Array(data.post_data.imagen.data)
                             .reduce((data, byte) => data + String.fromCharCode(byte), '')
@@ -86,15 +83,11 @@ const Post = () => {
             const user = parseInt(localStorage.getItem("loggedUser"));
             try
             {
-                const response = await fetch(`http://localhost:3000/like`, {  // Usar el ID del post en la URL
+                const response = await fetch(`http://localhost:3000/like/post_id=${id}&user_id=${user}`, {  // Usar el ID del post en la URL
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({                         
-                    user,
-                    post: pid
-                })
+                }
                 });
                 const data = await response.json();
                 if (data.like)
@@ -123,7 +116,7 @@ const Post = () => {
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
                         {post && (
-                                <PostContainer post={post} imageURL={imageURL} imageURL2={imageURL2} like={like} />
+                                <PostContainer post={post} imageURL={imageURL} imageURL2={imageURL2} like={like}/>
                         )}
                         </div>
                         <div className='row'>
@@ -134,7 +127,7 @@ const Post = () => {
                         </div>
                         <div className='row'>
                         <CommentInputContainer
-                            id_post={pid}
+                            id_post={parseInt(id)}
                         />
                         </div>
                         <div className='row'>

@@ -19,7 +19,7 @@ const Home = () => {
 
         const fetchPosts = async (userId) => {
             try {
-                const response = await fetch(`http://localhost:3000/home/${userId}`, {
+                const response = await fetch(`http://localhost:3000/home/${value}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -80,9 +80,14 @@ const Home = () => {
             <div className='container-fluid ContentPage'>
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
+                        {
+                        /*
                         <div className='row'>
                             <PostInputContainer />
                         </div>
+                        */
+                        }
+                        
                         <div className='row'>
                             {posts.length > 0 ? (
                                 posts.map((post) => (

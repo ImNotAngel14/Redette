@@ -10,13 +10,14 @@ const CommunityProfile = ({ community }) => {
   const handleJoinCommunity = async (event) => {
     event.preventDefault();
     try {
+      var value = localStorage.getItem('loggedUser');
       const response = await fetch('http://localhost:3000/member', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          user: 1, // ID del usuario que se está uniendo
+          user: parseInt(value), // ID del usuario que se está uniendo
           community: community.id_comunidad // ID de la comunidad a la que se está uniendo
         })
       });
@@ -42,13 +43,14 @@ const CommunityProfile = ({ community }) => {
   const handleLeaveCommunity = async (event) => {
     event.preventDefault();
     try {
+      var value = localStorage.getItem('loggedUser');
       const response = await fetch('http://localhost:3000/member', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          user: 1, // ID del usuario que se está eliminando
+          user: parseInt(value), // ID del usuario que se está eliminando
           community: community.id_comunidad // ID de la comunidad de la que se está eliminando
         })
       });

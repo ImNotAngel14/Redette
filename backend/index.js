@@ -215,7 +215,7 @@ app.post('/member', async (req, res) =>
   catch(error)
   {
     console.error('Error al crear publicacion:', error);
-    res.status(500).json({error: 'Error interno del servidor'});
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
 
@@ -240,7 +240,7 @@ app.get('/user/:id', async (req, res) =>
   catch(error)
   {
     console.error('Error al obtener datos de usuario:', error);
-    res.status(500).json({error: 'Error interno del servidor'});
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
 
@@ -263,11 +263,19 @@ app.get('/post/:id', async(req,res)=>
         comunidad: true
       }
     });
+    const likeCount = await prisma.likes.count({
+      where: 
+      {
+        FKPublicacion: postId
+      }
+    });
+    post.likeCount = likeCount;
     if(post)
       // Regresamos los datos importantes de los querys previos.
       res.json(
       {
         success: 1,
+        likeCount: likeCount,
         post_data: post
       }); 
     else
@@ -275,7 +283,7 @@ app.get('/post/:id', async(req,res)=>
   }
   catch(error)
   {
-    res.status(500).json({error: 'Error interno del servidor'});
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
 
@@ -299,6 +307,16 @@ app.get('/community/posts/:id', async(req, res) =>
         }
       }
     );
+    for(let i = 0; i < posts.length; i++)
+    {
+      const likeCount = await prisma.likes.count({
+        where: 
+        {
+          FKPublicacion: posts[i].id_publicacion
+        }
+      });
+      posts[i].likeCount = likeCount;
+    }
     if(posts.length > 0)
       res.json({success: 1, posts_data: posts}); 
     else
@@ -306,7 +324,7 @@ app.get('/community/posts/:id', async(req, res) =>
   }
   catch(error)
   {
-    res.status(500).json({error: 'Error interno del servidor'});
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
 
@@ -331,6 +349,16 @@ app.get('/user/posts/:id', async(req, res) =>
         }
       }
     );
+    for(let i = 0; i < posts.length; i++)
+      {
+        const likeCount = await prisma.likes.count({
+          where: 
+          {
+            FKPublicacion: posts[i].id_publicacion
+          }
+        });
+        posts[i].likeCount = likeCount;
+      }
     if(posts.length > 0)
       res.json({success: 1, posts_data: posts}); 
     else
@@ -338,7 +366,7 @@ app.get('/user/posts/:id', async(req, res) =>
   }
   catch(error)
   {
-    res.status(500).json({error: 'Error interno del servidor'});
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
 
@@ -386,7 +414,7 @@ app.get('/community/:id', async(req, res) =>
   }
   catch(error)
   {
-    res.status(500).json({error: 'Error interno del servidor'});
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
   }
 });
 
@@ -529,6 +557,16 @@ app.get('/home/:id', async(req, res)=>
         usuario: true,
       },
     });
+    for(let i = 0; i < communitys.length; i++)
+    {
+      const likeCount = await prisma.likes.count({
+        where: 
+        {
+          FKPublicacion: communitys[i].id_publicacion
+        }
+      });
+      communitys[i].likeCount = likeCount;
+    }
     if(communitys.length > 0)
     {
       res.json({Resultados: communitys});
@@ -577,15 +615,17 @@ app.get('/member/:id', async(req, res)=>
 //Guarda el like del usuario
 app.post('/like', async (req, res)=>
 {
-  const { user, post } = req.body;
+  const { user_id, post_id } = req.body;
+  console.log("user_id:"+user_id);
+  console.log("post_id:"+post_id);
   try
   {
     const like_validation = await prisma.likes.findFirst
     ({
       where:
       {
-        FKUsuario: user,
-        FKPublicacion: post
+        FKUsuario: user_id,
+        FKPublicacion: post_id
       }
     });
     if(like_validation)
@@ -608,8 +648,8 @@ app.post('/like', async (req, res)=>
       ({
         data:
         {
-          FKUsuario: user,
-          FKPublicacion: post
+          FKUsuario: user_id,
+          FKPublicacion: post_id
         }
       });
       if(like)
@@ -628,6 +668,9 @@ app.post('/like', async (req, res)=>
 app.post('/comment', async (req, res)=>
   {
     const { text, user, post } = req.body;
+    console.log("text:"+text);
+    console.log("user:"+user);
+    console.log("post:"+post);
     try
     {
       const comment = await prisma.comentarios.create
@@ -639,6 +682,7 @@ app.post('/comment', async (req, res)=>
           FKPublicacion: post
         }
       });
+      
       if(comment)
         res.json({success: 1});
       else
@@ -656,6 +700,7 @@ app.post('/comment', async (req, res)=>
   {
     // Obtenemos del URL el ID de la publicacion.
     const post_id = parseInt(req.params.id);
+    console.log("Buscando comentarios post: "+ post_id);
     try
     {
       const comments = await prisma.comentarios.findMany
@@ -681,9 +726,10 @@ app.post('/comment', async (req, res)=>
     }
   });
 
-  app.get('/like', async(req,res)=>
+  app.get('/like/post_id=:postId&user_id=:userId', async(req,res)=>
   {
-    const { user, post } = req.body;
+    const user = parseInt(req.params.userId);
+    const post = parseInt(req.params.postId);
     try
     {
       const like_validation = await prisma.likes.findFirst
@@ -705,3 +751,4 @@ app.post('/comment', async (req, res)=>
       res.status(500).json({error: 'Error interno del servidor', detalles: error});
     }
   });
+

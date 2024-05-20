@@ -256,30 +256,29 @@ const SideBar = () => {
     const [tagsError, setTagsError] = useState(false);
 
     const handleTagInputChange = (event) => {
-      setTagInput(event.target.value);
+        setTagInput(event.target.value);
     };
-  
     const handleAddTag = () => {
         if (tagInput.trim() !== '') {
           //si la etiqueta ya existe en el arreglo
-          if (!tags.includes(tagInput.trim())) {
-            setTags([...tags, tagInput.trim()]);
-            // Si se agrega al menos una etiqueta
-            setTagsError(false);
-          }
-          setTagInput('');
+            if (!tags.includes(tagInput.trim())) {
+                setTags([...tags, tagInput.trim()]);
+                // Si se agrega al menos una etiqueta
+                setTagsError(false);
+            }
+        setTagInput('');
         }
     };
-  
+
     const handleRemoveTag = (indexToRemove) => {
-      setTags(tags.filter((_, index) => index !== indexToRemove));
+        setTags(tags.filter((_, index) => index !== indexToRemove));
     };
-  
+
     const handleKeyDown = (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        handleAddTag();
-      }
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleAddTag();
+        }
     };
     {/* Etiquetas temas */}
     
@@ -289,7 +288,12 @@ const SideBar = () => {
                 <div className='SideBarContainer'>
                     <div className='SideBarWrapper'>
                         <a href='/pfposts'><i className="fa-solid fa-circle-user"></i> Perfil</a>
+                        {
+                        
+                        /*
                         <button onClick={handleShowPostModal}> <i className="fa-solid fa-plus fa-lg"></i> Nueva Publicación </button>
+                        */
+                        }
                         <button onClick={handleShowCommunityModal}><i className="fa-solid fa-person-circle-plus"></i> Crear Comunidad</button>
                         <a href='/pfcomm'><i className="fa-solid fa-people-roof"></i> Tus comunidades</a>
                         <a href='/pfsaved'><i className="fa-regular fa-bookmark"></i> Guardados</a>
@@ -307,12 +311,17 @@ const SideBar = () => {
                 <div className="form-group">
                 {PostRegError && <p className="error-text" style={{ color: 'red' }}>Creación de Post fallido. Intente de nuevo</p>}
                 <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
+                {
+                /*
                 <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={community} onChange={(e) => setSelectedCommunity(parseInt(e.target.value))}>
                     <option disabled value="">Selecciona una comunidad</option>
                     <option value={ 1 }>Comunidad 1</option>
                     <option value={ 2 }>Comunidad 2</option>
                     <option value={ 3 }>Comunidad 3</option>
                 </select>
+                */
+                }
+                
                 {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
                 <textarea className={`form-control ${titleError ? 'error' : ''}`} value={title} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
                 {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
