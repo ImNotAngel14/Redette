@@ -25,7 +25,7 @@ const CommunityHeader = ({ community, imageURL}) => {
                     <h1>{community.community_data.nombre}</h1>  
                 </div>
                 <div className='CommunityUsersNumber'>
-                    <h4>Cantidad de miembros:</h4><h4 className='UsersNumber'>#</h4>
+                    <h4>Cantidad de miembros:</h4><h4 className='UsersNumber'>{community.members}</h4>
                 </div>
                 <div className='CreatorCommInfo'>
                 <span>Creador de la Comunidad:</span>

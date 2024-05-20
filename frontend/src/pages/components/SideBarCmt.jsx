@@ -1,65 +1,62 @@
-import React, { useEffect, useState } from 'react';
-import './styles/SideBarCmt.css';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles/SideBarCmt.css';
+import Toast from 'react-bootstrap/Toast';
 
-const SideBarCmt= ({ community }) => {
+const SideBarCmt = ({ community, userId }) => {
+  const [isJoined, setIsJoined] = useState(false);
+  const [showJoinToast, setShowJoinToast] = useState(false);
+  const [showLeaveToast, setShowLeaveToast] = useState(false);
 
-//   const [community, setCommunity] = useState(null);
-//   useEffect(() => {
-//       console.log('CommunityHeader montado');
-//       const fetchCommunity = async () => {
-//           try {
-//               const response = await fetch(`http://localhost:3000/community/1`, {
-//                   method: 'GET',
-//                   headers: {
-//                       'Content-Type': 'application/json'
-//                   }
-//               });
+  const handleJoinCommunity = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/member', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user: userId,
+          community: community.community_data.id_comunidad
+        })
+      });
 
-//               const data = await response.json();
-//               if (data.success) {
-//                   // Actualiza el estado con los datos obtenidos
-//                   setCommunity(data.community_data);
-//                   console.log('SidebarCmt cargado');
-//                   console.log('Datos de la publicación:', data.community_data);
-//                   // Decodificar base64
-//                   // const base64Image = btoa(
-//                   //     new Uint8Array(data.community_data.fotoComunidad.data)
-//                   //         .reduce((data, byte) => data + String.fromCharCode(byte), '')
-//                   // );
-//                   // // Generar URL de la imagen
-//                   // const imageURL = `data:image/png;base64,${base64Image}`;
-//                   // setImageURL(imageURL);
-//                   // console.log(imageURL);
+      console.log('Usuario'+userId);
+      console.log('community'+community.community_data.id_comunidad);
 
-//               } else {
-//                   console.error('Error al cargar SidebarCmt:', data.message);
-//               }
-//           } catch (error) {
-//               console.error('Error al llamar a la API:', error);
-//           }
-//       };
-//       console.log('SidebarCmt desmontado');
-//       fetchCommunity();
-//   }, []);
+      const data = await response.json();
+      if (data.success) {
+        console.log('Usuario unido a la comunidad con éxito');
+        setIsJoined(true);
+        setShowJoinToast(true);
+      } else {
+        console.error('Error al unirse a la comunidad:', data.message);
+      }
+    } catch (error) {
+      console.error('Error al llamar a la API:', error);
+    }
+  };
+
+
+
   return (
     <div>
-        {community && (
-
+      {community && (
         <div className='Cmt_SideBarContainer'>
-            <div className='Cmt_SideBarWrapper'>
-                <h4>Descripción de la Comunidad:</h4>
-                <p>{community.community_data.descripcion}</p>
-                <div className='Cmt_DateUserContainer'>
-                {/* <strong>Creada en:</strong> <span>01/01/2001</span> */}
-                </div>
-                <hr/>
-                <button>Unirse</button>
-            </div>
+          <div className='Cmt_SideBarWrapper'>
+            <h4>Descripción de la Comunidad:</h4>
+            <p>{community.community_data.descripcion}</p>
+            {/* <hr />
+            {isJoined ? (
+              <button onClick={handleLeaveCommunity}>Abandonar</button>
+            ) : (
+              <button onClick={handleJoinCommunity}>Unirse</button>
+            )} */}
+          </div>
         </div>
-        )}
+      )}
     </div>
   );
-}
+};
 
 export default SideBarCmt;

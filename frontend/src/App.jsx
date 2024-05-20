@@ -24,7 +24,7 @@ function App() {
         <Route path="/register" element={ <Register/> } />
         {<Route path="/home" element={ <Home/> } />}
         <Route path="/post/:id" element={<Post />} />  {/* Ruta actualizada */}
-        {<Route path="/comm:id" element={ <Community/> } />}
+        {<Route path="/comm/:id" element={ <Community/> } />}
         {<Route path="/pfcomm" element={ <ProfileCom/> } />}
         {<Route path="/pfposts" element={ <ProfilePosts/> } />}
         {<Route path="/pfsaved" element={ <ProfileSaved/> } />}

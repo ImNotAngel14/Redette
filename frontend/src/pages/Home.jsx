@@ -29,7 +29,7 @@ const Home = () => {
                 const data = await response.json();
                 if (data.Resultados && data.Resultados.length > 0) {
                     console.log('Datos de la publicación:', data);
-                    console.log('Datos de la publicación:', data.Resultados[0].imagen.data);
+                    console.log('Datos de la imagen:', data.Resultados[0].imagen.data);
 
                     setPosts(data.Resultados);
 
@@ -84,14 +84,18 @@ const Home = () => {
                             <PostInputContainer />
                         </div>
                         <div className='row'>
-                            {posts.map((post) => (
-                                <PostContainer
-                                    key={post.id_publicacion}
-                                    post={post}
-                                    imageURL={images[post.id_publicacion]?.imageURL}
-                                    imageURL2={images[post.id_publicacion]?.imageURL2}
-                                />
-                            ))}
+                            {posts.length > 0 ? (
+                                posts.map((post) => (
+                                    <PostContainer
+                                        key={post.id_publicacion}
+                                        post={post}
+                                        imageURL={images[post.id_publicacion]?.imageURL}
+                                        imageURL2={images[post.id_publicacion]?.imageURL2}
+                                    />
+                                ))
+                            ) : (
+                                <p style={{ marginLeft: '4.5rem', marginBottom: '1rem' }}>No han publicado en tus comunidades</p>
+                            )}
                         </div>
                     </div>
                     <div className="col-lg-1 d-lg-block d-none" />

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/Community.css'
-import NavBar from './components/Navbar.jsx'
-import CommunityHeader from "./components/CommunityHeader.jsx"
+import './styles/Community.css';
+import NavBar from './components/Navbar.jsx';
+import CommunityHeader from "./components/CommunityHeader.jsx";
 import PostContainer from './components/PostContainer.jsx';
 import PostInputContainer from './components/PostInputContainer.jsx';
-import SideBarCmt from "./components/SideBarCmt.jsx"
-
-// import UserImage from "./components/img/userimage.jpeg"
+import SideBarCmt from "./components/SideBarCmt.jsx";
 
 const Community = () => {
     const { id } = useParams();  // Obtener el ID del post desde la URL
     const [community, setCommunity] = useState(null);
     const [imageURL, setImageURL] = useState(null);
+    const [postsComm, setPostsComm] = useState([]);
+    const [images, setImages] = useState({});
+    const [loadingPosts, setLoadingPosts] = useState(true);
+    const userId = parseInt(localStorage.getItem('loggedUser'));
+
     useEffect(() => {
-        console.log('CommunityHeader montado');
         const fetchCommunity = async () => {
             try {
                 const response = await fetch(`http://localhost:3000/community/${id}`, {
@@ -27,20 +29,13 @@ const Community = () => {
 
                 const data = await response.json();
                 if (data.success) {
-                    // Actualiza el estado con los datos obtenidos
-                    setCommunity(data.community_data);
-                    console.log('ComunidadHeader cargado');
-                    console.log('Datos de la comunidad', data);
-                    // Decodificar base64
+                    setCommunity(data);
                     const base64Image = btoa(
                         new Uint8Array(data.community_data.fotoComunidad.data)
                             .reduce((data, byte) => data + String.fromCharCode(byte), '')
                     );
-                    // Generar URL de la imagen
                     const imageURL = `data:image/png;base64,${base64Image}`;
                     setImageURL(imageURL);
-                    console.log(imageURL);
-
                 } else {
                     console.error('Error al cargar ComunidadHeader:', data.message);
                 }
@@ -48,18 +43,13 @@ const Community = () => {
                 console.error('Error al llamar a la API:', error);
             }
         };
-        console.log('CommunityHeader desmontado');
         fetchCommunity();
     }, [id]);
 
-    const [postsComm, setPostsComm] = useState([]);
-    const [images, setImages] = useState({});
-
     useEffect(() => {
-        console.log('Community Posts montados');
         const fetchPosts = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/community/posts/1`, {
+                const response = await fetch(`http://localhost:3000/community/posts/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -68,10 +58,6 @@ const Community = () => {
 
                 const data = await response.json();
                 if (data.posts_data && data.posts_data.length > 0) {
-                    console.log('Datos de la publicaciones:', data);
-                    console.log('Datos de la publicación:', data.posts_data[0].imagen.data);
-
-
                     setPostsComm(data.posts_data);
 
                     const imagePromises = data.posts_data.map(async (post) => {
@@ -95,60 +81,58 @@ const Community = () => {
                     }, {});
                     setImages(imagesMap);
                 } else {
-                    console.error('Error al cargar publicaciones:', data.message);
-                    console.log('Datos de la publicación:', data);
+                    setPostsComm([]);
                 }
+                setLoadingPosts(false);
             } catch (error) {
                 console.error('Error al llamar a la API:', error);
+                setLoadingPosts(false);
             }
         };
         fetchPosts();
-    }, []);
+    }, [id]);
 
     return (
         <div>
-            <NavBar>
-            </NavBar>
-
+            <NavBar />
             <div className='container-fluid ContentPage'>
                 {community && (
-                <CommunityHeader community={community} imageURL={imageURL}/>                   
+                    <CommunityHeader community={community} imageURL={imageURL} />
                 )}
                 <div className='row'>
                     <div className='col-lg-8 col-md-8'>
                         <div className='row'>
-                        <PostInputContainer>
-                        </PostInputContainer>
+                            <PostInputContainer />
                         </div>
                         <div className='row'>
-                        {/* <PostContainer>
-                        </PostContainer> */}
-                        {postsComm.map((post) => (
-                            <PostContainer
-                                key={post.id_publicacion}
-                                post={post}
-                                imageURL={images[post.id_publicacion]?.imageURL}
-                                imageURL2={images[post.id_publicacion]?.imageURL2}
-                            />
-                        ))}
+                            {loadingPosts ? (
+                                <p>Cargando publicaciones...</p>
+                            ) : postsComm.length > 0 ? (
+                                postsComm.map((post) => (
+                                    <PostContainer
+                                        key={post.id_publicacion}
+                                        post={post}
+                                        imageURL={images[post.id_publicacion]?.imageURL}
+                                        imageURL2={images[post.id_publicacion]?.imageURL2}
+                                    />
+                                ))
+                            ) : (
+                                <p style={{ marginLeft: '4.5rem', marginBottom: '1rem' }}>Aún no hay publicaciones en la comunidad.</p>
+                            )}
                         </div>
                     </div>
-                    <div className="col-lg-1  d-lg-block d-none" >
-                    {/* Espacio entre las columnas visible solo en pantallas LG o más grandes */}
+                    <div className="col-lg-1 d-lg-block d-none">
+                        {/* Espacio entre las columnas visible solo en pantallas LG o más grandes */}
                     </div>
                     <div className='col-lg-3 col-md-4 order-last'>
-                    {community && (
-                    <SideBarCmt community={community}/>
-                    )}
+                        {community && (
+                            <SideBarCmt community={community} userId={userId} />
+                        )}
                     </div>
                 </div>
             </div>
-
         </div>
-
-    )
-
-
+    );
 }
 
 export default Community;
