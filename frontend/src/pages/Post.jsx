@@ -47,7 +47,7 @@ const Post = () => {
                     setImageURL(imageURL);
 
                     const base64Image2 = btoa(
-                        new Uint8Array(data.profileImage.data)  // Ajuste para acceder correctamente a la imagen de perfil
+                        new Uint8Array(data.post_data.usuario.fotoPerfil.data)  // Ajuste para acceder correctamente a la imagen de perfil
                             .reduce((data, byte) => data + String.fromCharCode(byte), '')
                     );
                     const imageURL2 = `data:image/png;base64,${base64Image2}`;
