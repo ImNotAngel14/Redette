@@ -303,6 +303,11 @@ app.get('/community/posts/:id', async(req, res) =>
         where:
         {
           FKComunidad: communityId
+        },
+        include: 
+        {
+          comunidad: true,
+          usuario: true
         }
       }
     );
@@ -330,6 +335,11 @@ app.get('/user/posts/:id', async(req, res) =>
         where:
         {
           FKUsuario: userId
+        },
+        include: 
+        {
+          comunidad: true,
+          usuario: true
         }
       }
     );
@@ -540,6 +550,26 @@ app.get('/home/:id', async(req, res)=>
       // No se encontraron posts relacionados al usuario.
       res.json({Resultados: communitys, message: "No se encontraron coincidencias."});
     }
+  }
+  catch(error)
+  {
+    console.log(error);
+    res.status(500).json({error: 'Error interno del servidor', detalles: error});
+  }
+});
+
+app.get('/member/:id', async(req, res)=>
+{
+  const id_member = parseInt(req.params.id);
+  try
+  {
+    const communitys = await prisma.miembros.findMany
+    ({
+      where:
+      {
+        FKUsuario: id_member
+      }
+    });
   }
   catch(error)
   {
