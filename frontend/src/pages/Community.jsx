@@ -59,6 +59,7 @@ const Community = () => {
                 const data = await response.json();
                 if (data.posts_data && data.posts_data.length > 0) {
                     setPostsComm(data.posts_data);
+                    console.log('Datos de la imagen:', data.posts_data[0]);
 
                     const imagePromises = data.posts_data.map(async (post) => {
                         const base64Image = btoa(
@@ -67,7 +68,7 @@ const Community = () => {
                         const imageURL = `data:image/png;base64,${base64Image}`;
 
                         const base64Image2 = btoa(
-                            new Uint8Array(post.imagen.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+                            new Uint8Array(post.usuario.fotoPerfil.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
                         );
                         const imageURL2 = `data:image/png;base64,${base64Image2}`;
 

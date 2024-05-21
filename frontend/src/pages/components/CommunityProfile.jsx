@@ -59,8 +59,11 @@ const CommunityProfile = ({ community }) => {
       if (data.success) {
         console.log('Usuario abandonó la comunidad con éxito');
         setShowToast(true);
+        window.location.reload(); // Recargar la página
         setToastMessage('Abandonaste la comunidad ' + community.nombre);
-      } else if (data.message === "¡No puede salir de una comunidad en la que no se encuentra!.") {
+      } else if (
+        data.message === "¡No puede salir de una comunidad en la que no se encuentra!."
+      ) {
         console.log('El usuario no pertenece a esta comunidad');
         setShowToast(true);
         setToastMessage('¡No puede salir de una comunidad en la que no se encuentra!');

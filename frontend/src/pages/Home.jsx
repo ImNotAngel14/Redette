@@ -99,7 +99,7 @@ const Home = () => {
                                     />
                                 ))
                             ) : (
-                                <p style={{ marginLeft: '4.5rem', marginBottom: '1rem' }}>No han publicado en tus comunidades</p>
+                                <p style={{ marginLeft: '4.5rem', marginBottom: '1rem' }}>No han publicado en tus comunidades o no estás en ninguna comunidad</p>
                             )}
                         </div>
                     </div>

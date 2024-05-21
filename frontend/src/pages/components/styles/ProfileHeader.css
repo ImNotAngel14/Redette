@@ -37,7 +37,7 @@
     }
 
     .SpanContainer{
-    width: 33%;
+    /* width: 33%; */
     &:not(:last-child){
       border-right: 1px solid #F5F5F5;
     }

@@ -123,7 +123,7 @@ const ProfilePosts = () => {
                                     />
                                 ))
                             ) : (
-                                <p>Aún no hay publicaciones en el perfil.</p>
+                                <p style={{ marginLeft: '4.5rem', marginBottom: '1rem' }}>No haz hecho publicaciones anteriormente</p>
                             )}
                         </div>
                     </div>

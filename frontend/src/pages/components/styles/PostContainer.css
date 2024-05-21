@@ -37,6 +37,8 @@
   .PostImage{
     margin-bottom: 1rem;
     .PostImg{
+      min-width: 8rem;
+      min-height: 8rem;
       max-width: 14rem;
       max-height: 12rem;
     }
@@ -54,13 +56,16 @@
   
   .Buttons{
     button{
-      border: 1px solid rgb(156, 156, 156);
+      border: none !important;
       &:hover{
-        border: 1px solid rgb(156, 156, 156);
-        background-color: #dddddd;
+        border: none !important;
+        background-color: white !important;
       }
     }
+
     .btn{
+      font-size: large !important;
+
       --bs-btn-disabled-opacity: 1.0;
     }
     .btn:disabled{

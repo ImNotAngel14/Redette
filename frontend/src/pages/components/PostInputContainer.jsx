@@ -82,10 +82,10 @@ const PostInputContainer = () => {
               // Actuamos en base a la respuesta de la API
               const data = await response.json();
               if (data.success) {
-                  // Mostrar mensaje de éxito de creación de comunidad
                   handleShowPostSuccess(); // Mostrar el modal de éxito
                   handleClosePostModal(); // Cerrar el modal de creación de post
                   setPostRegError(false); // Resetear el error
+                  window.location.reload(); // Recargar la página
               } else {
                   // Mostrar mensaje de error del registro
                   setPostRegError(true);

@@ -4,31 +4,16 @@ import './styles/SideBar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const SideBar = () => {
-    const [showPostModal, setShowPostModal] = useState(false);
     const [showCommunityModal, setShowCommunityModal] = useState(false);
 
-    const handleClosePostModal = () => {
-        setShowPostModal(false);
-        setPostRegError(false);
-        }
     const handleCloseCommunityModal = () => {
-        setTags([]);// Reiniciar el array de etiquetas
+        setTags([]); // Reiniciar el array de etiquetas
         setSelectedCommImage(''); // Reiniciar la imagen seleccionada
         setCommImageBase64(''); // Reiniciar la imagen en base64
         setShowCommunityModal(false);
         setCommRegError(false);
     }
-    const handleShowPostModal = () => {
-        setShowPostModal(true);
-        setSelectedFileName('');
-        setSelectedFileBase64('');
-        setSelectedTitle('');
-        setSelectedCommunity('');
-        setSelectedLink('');
-        setSelectedText('');
-        setTitleError(false);
-        setCommunityError(false);
-    };
+
     const handleShowCommunityModal = () => {
         setShowCommunityModal(true);
         setSelectedName('');
@@ -43,19 +28,6 @@ const SideBar = () => {
         window.location.replace("/login");
     }
 
-    // POST
-    const [selectedFileName, setSelectedFileName] = useState('');
-    const [selectedFileBase64, setSelectedFileBase64] = useState('');
-    const [title, setSelectedTitle] = useState('');
-    const [body, setSelectedText] = useState('');
-    const [link, setSelectedLink] = useState('');
-    const [community, setSelectedCommunity] = useState('');
-    const [titleError, setTitleError] = useState(false);
-    const [communityError, setCommunityError] = useState(false);
-
-    const [PostRegError, setPostRegError] = useState(false); // Estado para el error de publicacion
-    // POST
-
     // COMUNIDAD {
     const [name, setSelectedName] = useState('');
     const [description, setSelectedDesc] = useState('');
@@ -67,76 +39,9 @@ const SideBar = () => {
     const [commImageError, setCommImageError] = useState(false);
 
     const [CommRegError, setCommRegError] = useState(false); // Estado para el error de registro
+    const [createdCommunityId, setCreatedCommunityId] = useState(null);
+
     // } COMUNIDAD
-
-    const handleSubmitPost = async (event) => {
-        event.preventDefault();
-
-        if (!title) {
-            setTitleError(true);
-        } else {
-            setTitleError(false);
-        }
-
-        if (!community) {
-            setCommunityError(true);
-        } else {
-            setCommunityError(false);
-        }
-
-        // Si todos los campos obligatorios están completos, puedes enviar el formulario
-        if (title && community) {
-            let image = selectedFileBase64.substring(22);
-            //usuario harcodeado
-            let author = 1;
-
-
-            // Aquí puedes agregar la lógica para enviar el formulario
-            // Obtener los valores de los campos del formulario
-            const formData = {
-                author,
-                community,
-                title,
-                body,
-                link,
-                image
-            };
-            console.log("Datos del formulario de nueva publicacion:", formData);
-            // peticion backend
-            try {
-                const response = await fetch('http://localhost:3000/post', {
-                    method: 'POST',
-                    headers: {
-                    'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({                         
-                        community,
-                        title,
-                        body,
-                        link,
-                        image,
-                        author
-                    })
-                });
-
-                // Actuamos en base a la respuesta de la API
-                const data = await response.json();
-                if (data.success) {
-                    // Mostrar mensaje de éxito de creación de comunidad
-                    handleShowPostSuccess(); // Mostrar el modal de éxito
-                    handleClosePostModal(); // Cerrar el modal de creación de post
-                    setPostRegError(false); // Resetear el error
-                } else {
-                    // Mostrar mensaje de error del registro
-                    setPostRegError(true);
-                    console.error('Error en la publicación:', data.message);
-                }
-            } catch (error) {
-                setPostRegError(true);
-                console.error('Error al llamar a la API:', error);
-            }
-        }
-    };
 
     const handleSubmitCommunity = async (event) => {
         event.preventDefault();
@@ -164,21 +69,18 @@ const SideBar = () => {
             return;
         }
 
-
-
         // Si todos los campos obligatorios están completos, puedes enviar el formulario
         if (name && description && commImageBase64 && (tags.length > 0)) {
-        // Imprimir los valores en la consola
-        let image = commImageBase64.substring(22);
-        var creator = 1;
+            // Imprimir los valores en la consola
+            let image = commImageBase64.substring(22);
+            const userId = parseInt(localStorage.getItem('loggedUser'));
 
             // Obtener los valores de los campos del formulario
             const formData = {
                 name,
                 description,
                 image,
-                // tags
-                creator
+                creator: userId,
             };
             console.log("Datos del formulario de nueva comunidad:", formData);
             // peticion backend
@@ -186,23 +88,22 @@ const SideBar = () => {
                 const response = await fetch('http://localhost:3000/community', {
                     method: 'POST',
                     headers: {
-                    'Content-Type': 'application/json'
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ name, description, image, creator})
+                    body: JSON.stringify(formData)
                 });
 
                 // Actuamos en base a la respuesta de la API
                 const data = await response.json();
-                if(data.success)
-                {
+                if (data.success) {
                     // Mostrar mensaje de exito de creacion de comunidad
                     // ...
+                    setCreatedCommunityId(data.createdCommunityId); // Guardar el ID de la comunidad creada
+                    console.log(data.createdCommunityId);
                     handleShowCommSuccess(); // Mostrar el modal de éxito
                     handleCloseCommunityModal(); // Cerrar el modal de creación de comunidad
                     setCommRegError(false); // Resetear el error
-                }
-                else
-                {
+                } else {
                     // Mostrar mensaje de error del registro
                     setCommRegError(true);
                     console.error('Error en el registro de la comunidad:', data.message);
@@ -215,19 +116,6 @@ const SideBar = () => {
 
         }
 
-    };
-
-    // imagen publicacion
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setSelectedFileName(file.name);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSelectedFileBase64(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
     };
 
     // imagen comunidad
@@ -244,11 +132,8 @@ const SideBar = () => {
     };
 
     const [showCommunitySuccess, setShowCommSuccessModal] = useState(false);
-    const [showPostSuccess, setShowPostSuccessModal] = useState(false);
     const handleCloseCommSuccess = () => setShowCommSuccessModal(false);
-    const handleClosePostSuccess = () => setShowPostSuccessModal(false);
     const handleShowCommSuccess = () => setShowCommSuccessModal(true);
-    const handleShowPostSuccess = () => setShowPostSuccessModal(true);
 
     {/* Etiquetas temas */}
     const [tags, setTags] = useState([]);
@@ -260,13 +145,13 @@ const SideBar = () => {
     };
     const handleAddTag = () => {
         if (tagInput.trim() !== '') {
-          //si la etiqueta ya existe en el arreglo
+            //si la etiqueta ya existe en el arreglo
             if (!tags.includes(tagInput.trim())) {
                 setTags([...tags, tagInput.trim()]);
                 // Si se agrega al menos una etiqueta
                 setTagsError(false);
             }
-        setTagInput('');
+            setTagInput('');
         }
     };
 
@@ -296,63 +181,12 @@ const SideBar = () => {
                         }
                         <button onClick={handleShowCommunityModal}><i className="fa-solid fa-person-circle-plus"></i> Crear Comunidad</button>
                         <a href='/pfcomm'><i className="fa-solid fa-people-roof"></i> Tus comunidades</a>
-                        <a href='/pfsaved'><i className="fa-regular fa-bookmark"></i> Guardados</a>
+                        {/* <a href='/pfsaved'><i className="fa-regular fa-bookmark"></i> Guardados</a> */}
                         <hr />
-                        <button onClick={handleLogOff}>Cerrar sesión</button>
+                        <button onClick={handleLogOff}>Cerrar sesión <i className="fa-solid fa-right-from-bracket"></i></button>
                     </div>
                 </div>
             </div>
-            <Modal show={showPostModal} onHide={handleClosePostModal}>
-            <Modal.Header closeButton>
-            <Modal.Title>Crear Nuevo Post</Modal.Title>
-            </Modal.Header>
-            <form onSubmit={handleSubmitPost}>
-            <Modal.Body>
-                <div className="form-group">
-                {PostRegError && <p className="error-text" style={{ color: 'red' }}>Creación de Post fallido. Intente de nuevo</p>}
-                <label className="CommunityLabel" htmlFor="CommunityList">Publicar en:</label>
-                {
-                /*
-                <select id="CommunityList" className={`${communityError ? 'error' : ''}`} value={community} onChange={(e) => setSelectedCommunity(parseInt(e.target.value))}>
-                    <option disabled value="">Selecciona una comunidad</option>
-                    <option value={ 1 }>Comunidad 1</option>
-                    <option value={ 2 }>Comunidad 2</option>
-                    <option value={ 3 }>Comunidad 3</option>
-                </select>
-                */
-                }
-                
-                {communityError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-                <textarea className={`form-control ${titleError ? 'error' : ''}`} value={title} onChange={(e) => setSelectedTitle(e.target.value)} rows="1" placeholder='Título'></textarea>
-                {titleError && <p className="error-text" style={{ color: 'red' }}>**Campo obligatorio</p>}
-                <textarea className="form-control" rows="3" placeholder='Texto' value={body} onChange={(e) => setSelectedText(e.target.value)}></textarea>
-                <div className='AddtoPostContainer'>
-                    <div className='FileInputContainer'>
-                        <input
-                            type='file'
-                            accept="image/*"
-                            id='post_file'
-                            style={{ display: 'none' }}
-                            onChange={handleFileChange}
-                        />
-                        <label htmlFor='post_file'>
-                            <i className="fa-regular fa-image fa-lg"></i>
-                            <span>Adjuntar Multimedia</span><br />
-                        </label>
-                        <p>{selectedFileName}</p>
-                    </div>
-                    <div className='UrlInputContainer'>
-                        <label htmlFor='post_url'><i className="fa-solid fa-link"></i></label>
-                        <input type='url' className='input_url' id='post_url' value={link} onChange={(e) => setSelectedLink(e.target.value)} placeholder='Adjuntar link' />
-                    </div>
-                </div>
-                </div>
-            </Modal.Body>
-            <Modal.Footer>
-                <input type='submit' className='buttonPostAccept' value='Publicar' />
-            </Modal.Footer>
-            </form>
-            </Modal>
 
             <Modal show={showCommunityModal} onHide={handleCloseCommunityModal}>
                 <Modal.Header closeButton>
@@ -398,32 +232,31 @@ const SideBar = () => {
                             <button type="button" className='tag-add-btn' onClick={handleAddTag}><i className="fa-solid fa-plus"></i></button>
                             {tagsError && <p style={{ color: 'red' }}>**Debes agregar al menos un tema</p>}
                         </div>
-
                     </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <input type='submit' className='buttonPostAccept' value='Crear' />
-                    </Modal.Footer>
-                </form>
-            </Modal>
-
-            <Modal show={showCommunitySuccess} onHide={handleCloseCommSuccess}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Comunidad creada exitosamente</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                <button className="buttonPostAccept"> <a href='/comm'> Ver Comunidad</a> </button>
                 </Modal.Body>
+                <Modal.Footer>
+                    <input type='submit' className='buttonPostAccept' value='Crear' />
+                </Modal.Footer>
+            </form>
+        </Modal>
 
-            </Modal>
+        <Modal show={showCommunitySuccess} onHide={handleCloseCommSuccess}>
+            <Modal.Header closeButton>
+                <Modal.Title>Comunidad creada exitosamente</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <button className="buttonPostAccept">
+            <a href={`/comm/${createdCommunityId}`}>Ver Comunidad</a>
+        </button>
+                        {/* <button className="buttonPostAccept">
+                            <a href={`/comm/1`}>Ver Comunidad</a>
+                        </button> */}
+            </Modal.Body>
 
-            <Modal show={showPostSuccess} onHide={handleClosePostSuccess}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Post publicado exitosamente</Modal.Title>
-                </Modal.Header>
-            </Modal>
-        </div>
-    );
+        </Modal>
+
+    </div>
+);
 };
 
 export default SideBar;

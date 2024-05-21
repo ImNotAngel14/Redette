@@ -26,19 +26,6 @@ const CommentContainer = ({ texto, fecha, usuario, fotoPerfil}) => {
                                 <p>{fecha}</p>
                             </div>
                         </div>
-                        <hr/>
-                        {
-                        /*
-                            <div className='Buttons'>
-                                <div className="btn-group btn-spacing" role="group" aria-label="Basic example">
-                                    <button type="button" className="btn"><i className="fa-solid fa-angles-up"></i></button>
-                                    <button type="button" className="btn" disabled>#</button>
-                                    <button type="button" className="btn"><i className="fa-solid fa-angles-down"></i></button>
-                                </div>
-                                { <button className="btn-spacing"> <a><i class="fa-solid fa-comments"></i> Responder</a> </button> }
-                            </div>
-                        */
-                        }
                         
                     </div>
                 </div>

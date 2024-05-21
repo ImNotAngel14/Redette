@@ -19,15 +19,15 @@ const ProfileHeader = ({ username, profileImage }) => {
                 </div>
                 <hr/>
                 <div className='col-12 d-flex d-flex justify-content-evenly'>
-                    <div className=' col-3 SpanContainer d-flex justify-content-center'>
+                    <div className=' col-6 SpanContainer d-flex justify-content-center'>
                         <a href='/pfposts' className='PostsLink'>Publicaciones</a>
                     </div>
-                    <div className='col-3 SpanContainer d-flex justify-content-center'>
+                    <div className='col-6 SpanContainer d-flex justify-content-center'>
                         <a href='/pfcomm' className='CommunityLink'>Comunidades</a>
                     </div>
-                    <div className='col-3 SpanContainer d-flex justify-content-center'>
+                    {/* <div className='col-3 SpanContainer d-flex justify-content-center'>
                         <a href='/pfsaved' className='SavedLink'>Guardados</a>  
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

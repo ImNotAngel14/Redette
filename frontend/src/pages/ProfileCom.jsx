@@ -85,7 +85,7 @@ const ProfileCom = () => {
                                 />
                             ))
                         ) : (
-                            <p>No estás en ninguna comunidad.</p>
+                            <p style={{ marginLeft: '4.5rem', marginBottom: '1rem' }}>No estás en ninguna comunidad.</p>
                         )}
                     </div>
                     <div className="col-lg-1  d-lg-block d-none">

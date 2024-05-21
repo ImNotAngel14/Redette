@@ -111,7 +111,7 @@ app.post('/community', async (req, res) =>
       });
       if(member)
       {
-        res.json({success: 1});
+        res.json({ success: 1, createdCommunityId: community.id_comunidad }); // Enviar el ID de la comunidad creada
       }
       else
       {
